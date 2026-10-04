@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Science | أ/ بيشوي ثروت</title>
+    <title>Dr. Science | مستر بيشوي ثروت</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -62,32 +62,31 @@
 
         /* Watermark Animation Overlay */
         @keyframes floatWatermark {
-            0% { top: 12%; left: 8%; opacity: 0.7; }
-            25% { top: 75%; left: 15%; opacity: 0.9; }
-            50% { top: 35%; left: 70%; opacity: 0.6; }
-            75% { top: 80%; left: 65%; opacity: 0.8; }
-            100% { top: 12%; left: 8%; opacity: 0.7; }
+            0% { top: 10%; left: 10%; opacity: 0.75; }
+            25% { top: 70%; left: 20%; opacity: 0.9; }
+            50% { top: 30%; left: 65%; opacity: 0.7; }
+            75% { top: 75%; left: 55%; opacity: 0.85; }
+            100% { top: 10%; left: 10%; opacity: 0.75; }
         }
 
         .watermark-text {
             position: absolute;
-            animation: floatWatermark 18s infinite ease-in-out;
+            animation: floatWatermark 16s infinite ease-in-out;
             pointer-events: none;
             user-select: none;
             z-index: 50;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(245, 158, 11, 0.4);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(245, 158, 11, 0.5);
             color: #fbbf24;
             font-size: 0.85rem;
             font-weight: 700;
             padding: 6px 14px;
             border-radius: 9999px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
             white-space: nowrap;
         }
 
-        /* Glowing Effects */
         .gold-glow {
             box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
         }
@@ -96,7 +95,7 @@
         }
 
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
+            background: rgba(30, 41, 59, 0.75);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -107,20 +106,21 @@
     <header class="sticky top-0 z-40 w-full glass-card border-b border-slate-800/80 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
-            <!-- Brand Logo -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-amber-300 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg shadow-amber-500/20 transform hover:scale-105 transition-all">
-                    <i class="fa-solid fa-flask"></i>
+            <!-- Brand Logo with Teacher Image -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="renderLessons()">
+                <div class="relative w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-amber-300 overflow-hidden flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg shadow-amber-500/20 border border-amber-400/30 transform hover:scale-105 transition-all">
+                    <img src="bishoy.jpg" alt="مستر بيشوي ثروت" class="w-full h-full object-cover" onerror="this.onerror=null; this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                    <i class="fa-solid fa-flask hidden"></i>
                 </div>
                 <div>
                     <h1 class="text-xl font-extrabold tracking-wide bg-gradient-to-r from-amber-400 via-amber-200 to-yellow-100 bg-clip-text text-transparent">
                         Dr. Science
                     </h1>
-                    <p class="text-xs text-amber-500/90 font-medium">أ/ بيشوي ثروت</p>
+                    <p class="text-xs text-amber-500/90 font-medium">مستر بيشوي ثروت</p>
                 </div>
             </div>
 
-            <!-- Navigation Links & User Info -->
+            <!-- Header Navigation & Student Profile Info -->
             <div class="flex items-center gap-3">
                 <div id="userInfoHeader" class="hidden flex items-center gap-3 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700/60">
                     <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">
@@ -135,13 +135,13 @@
                     </button>
                 </div>
 
-                <!-- Admin Button -->
-                <button id="adminBtnHeader" onclick="openAdminModal()" class="hidden bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
+                <!-- Admin Control Panel Trigger -->
+                <button id="adminBtnHeader" onclick="openAdminModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
                     <i class="fa-solid fa-user-shield"></i>
                     <span class="hidden md:inline">لوحة التحكم</span>
                 </button>
 
-                <!-- Login / Register Trigger -->
+                <!-- Login / Signup Modal Trigger -->
                 <button id="loginBtnHeader" onclick="openAuthModal('login')" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm transition-all shadow-md shadow-amber-500/20 flex items-center gap-2">
                     <i class="fa-solid fa-right-to-bracket"></i>
                     <span>تسجيل الدخول</span>
@@ -154,21 +154,35 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Hero Banner -->
+        <!-- Hero Banner Section -->
         <section class="relative rounded-3xl overflow-hidden mb-10 p-8 sm:p-12 glass-card border border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
             <div class="absolute -top-24 -left-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
             
-            <div class="relative z-10 max-w-3xl">
-                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold mb-4">
-                    <i class="fa-solid fa-atom animate-spin-slow"></i> المنصة التعليمية المتكاملة
-                </span>
-                <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight mb-4">
-                    تفوق في مادة <span class="bg-gradient-to-r from-amber-400 to-yellow-200 bg-clip-text text-transparent">العلوم و Science</span>
-                </h2>
-                <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
-                    شرح مبسط، تجارب تفاعلية، ومتابعة مستمرة مع المستر بيشوي ثروت لجميع المراحل الإعدادية والثانوية (عربي ولغات).
-                </p>
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="max-w-2xl">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold mb-4">
+                        <i class="fa-solid fa-atom animate-spin-slow"></i> المنصة التعليمية الرسمية
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight mb-4">
+                        تفوق في مادة <span class="bg-gradient-to-r from-amber-400 to-yellow-200 bg-clip-text text-transparent">العلوم و Science</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                        شرح مبسط، تجارب تفاعلية، ومتابعة مستمرة مع مستر بيشوي ثروت لجميع المراحل الإعدادية والثانوية (عربي ولغات).
+                    </p>
+                </div>
+
+                <!-- Teacher Image Card -->
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                    <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-slate-800 border-2 border-amber-500/40 overflow-hidden shadow-2xl flex items-center justify-center">
+                        <img src="bishoy.jpg" alt="مستر بيشوي ثروت" class="w-full h-full object-cover" onerror="this.onerror=null; this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                        <div class="hidden text-center p-4">
+                            <i class="fa-solid fa-user-tie text-5xl text-amber-400 mb-2"></i>
+                            <p class="text-xs font-bold text-white">مستر بيشوي ثروت</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -205,7 +219,7 @@
 
                 <!-- Grade Buttons -->
                 <div id="gradeContainer" class="flex bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800 gap-1 overflow-x-auto">
-                    <!-- Dynamic Grades Populated via JS -->
+                    <!-- Populated dynamically -->
                 </div>
             </div>
         </section>
@@ -265,14 +279,21 @@
                 </button>
             </form>
 
+            <!-- Registration Form with Surgical Field Handling -->
             <form id="registerForm" onsubmit="handleRegister(event)" class="hidden space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">اسم الطالب بالكامل</label>
                     <input type="text" id="regName" required placeholder="محمد أحمد محمود" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">رقم الهاتف</label>
-                    <input type="tel" id="regPhone" required placeholder="01xxxxxxxxx" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">رقم هاتف الطالب</label>
+                        <input type="tel" id="regPhone" required placeholder="01xxxxxxxxx" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-3 text-xs text-white focus:outline-none focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">رقم ولي الأمر</label>
+                        <input type="tel" id="regParentPhone" required placeholder="01xxxxxxxxx" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-3 text-xs text-white focus:outline-none focus:border-amber-500">
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -293,7 +314,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">الصف الدراسي</label>
                     <select id="regGrade" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-3 text-xs text-white focus:outline-none focus:border-amber-500">
-                        <!-- Populated dynamic -->
+                        <!-- Populated dynamically -->
                     </select>
                 </div>
                 <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-amber-500/20">
@@ -312,11 +333,11 @@
                 </button>
             </div>
 
-            <!-- Video Iframe Wrapper with Floating Watermark Protection -->
+            <!-- Video Player Wrapper with Watermark Protection -->
             <div class="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden" id="videoContainer">
                 <iframe id="videoIframe" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 
-                <!-- Dynamic Floating Watermark -->
+                <!-- Anti-Leak Animated Watermark Overlay -->
                 <div id="videoWatermark" class="watermark-text hidden">
                     <i class="fa-solid fa-shield-halved ml-1 text-xs"></i>
                     <span id="wmPhone">01xxxxxxxxx</span> - <span id="wmName">طالب</span>
@@ -327,10 +348,10 @@
             <div class="p-4 bg-slate-900 flex flex-wrap gap-3 justify-between items-center border-t border-slate-800 text-xs">
                 <div id="videoModalDesc" class="text-slate-400 max-w-lg"></div>
                 <div class="flex items-center gap-2">
-                    <a id="homeworkBtn" href="#" target="_blank" class="hidden bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-3 py-2 rounded-xl font-bold transition-all items-center gap-1.5">
+                    <a id="homeworkBtn" href="#" target="_blank" class="hidden bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5">
                         <i class="fa-solid fa-file-pen"></i> الواجب
                     </a>
-                    <a id="notesBtn" href="#" target="_blank" class="hidden bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 px-3 py-2 rounded-xl font-bold transition-all items-center gap-1.5">
+                    <a id="notesBtn" href="#" target="_blank" class="hidden bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5">
                         <i class="fa-solid fa-file-pdf"></i> المذكرة
                     </a>
                 </div>
@@ -344,10 +365,10 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Admin Authentication Check -->
+            <!-- Admin Authentication Section -->
             <div id="adminAuthSection" class="space-y-4">
                 <div class="text-center mb-6">
-                    <div class="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl">
+                    <div class="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl border border-amber-500/20">
                         <i class="fa-solid fa-lock"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white">دخول الأدمن</h3>
@@ -361,7 +382,7 @@
                     <label class="block text-xs font-semibold text-slate-300 mb-1">كلمة السر</label>
                     <input type="password" id="adminPass" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
                 </div>
-                <button onclick="verifyAdmin()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm transition-all">
+                <button onclick="verifyAdmin()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-amber-500/20">
                     تسجيل الدخول
                 </button>
             </div>
@@ -381,7 +402,7 @@
                         <input type="text" id="addTitle" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">رابط الفيديو (YouTube أو Google Drive)</label>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">رابط الفيديو (YouTube)</label>
                         <input type="url" id="addUrl" required placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500">
                     </div>
                     <div class="grid grid-cols-3 gap-3">
@@ -430,7 +451,7 @@
 
     <footer class="mt-auto border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p>© 2026 جميع الحقوق محفوظة لـ <span class="text-amber-400 font-bold">Dr. Science | أ/ بيشوي ثروت</span></p>
+            <p>© 2026 جميع الحقوق محفوظة لـ <span class="text-amber-400 font-bold">Dr. Science | مستر بيشوي ثروت</span></p>
             <div class="flex items-center gap-4 text-slate-400 text-base">
                 <a href="#" class="hover:text-amber-400 transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
                 <a href="#" class="hover:text-amber-400 transition-colors"><i class="fa-brands fa-youtube"></i></a>
@@ -440,10 +461,10 @@
     </footer>
 
     <script>
-        // API Endpoint Configuration
+        // Google Apps Script API Endpoint Configuration
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOhGjv1q0LJJbnbOeBMPUUjPxYPogBj_2Xy9l9Qg2-3tQbptCr_WihgxtjphXTaPK3/exec';
 
-        // Core Application State
+        // Application State
         let currentUser = null;
         let currentTrack = 'علوم (عربي)';
         let currentStage = 'المرحلة الإعدادية';
@@ -457,15 +478,28 @@
             'المرحلة الثانوية': ['الصف الأول الثانوي', 'الصف الثاني الثانوي', 'الصف الثالث الثانوي']
         };
 
+        /**
+         * Surgical text cleaner: strips all single quotes ('), double quotes, backticks,
+         * and purges any literal string "undefined" or "null".
+         */
         function cleanText(input) {
-            if (!input || input === 'undefined' || input === 'null') return '';
-            return String(input).replace(/['"’‘`]/g, '').trim();
+            if (input === null || input === undefined) return '';
+            let str = String(input).trim();
+            if (str === 'undefined' || str === 'null') return '';
+            // Strip single quotes, quotes, curly quotes, backticks
+            return str.replace(/['"’‘`]/g, '').trim();
         }
 
+        /**
+         * Surgical phone cleaner: strips single quotes, spaces, and non-digit characters
+         * except leading '+', returning a pure telephone string without quotes or undefined.
+         */
         function cleanPhoneString(phone) {
-            if (!phone || phone === 'undefined' || phone === 'null') return '';
-            // Strip quotes and non-digit characters except +
-            let cleaned = String(phone).replace(/['"’‘`]/g, '').replace(/[^0-9+]/g, '').trim();
+            if (phone === null || phone === undefined) return '';
+            let str = String(phone).trim();
+            if (str === 'undefined' || str === 'null') return '';
+            // Remove quotes first, then filter digits
+            let cleaned = str.replace(/['"’‘`]/g, '').replace(/[^0-9+]/g, '').trim();
             return cleaned;
         }
 
@@ -476,26 +510,28 @@
                     const parsed = JSON.parse(rawStored);
                     const cleanName = cleanText(parsed.name);
                     const cleanPhone = cleanPhoneString(parsed.phone);
+                    const cleanParentPhone = cleanPhoneString(parsed.parentPhone);
 
-                    // Radical Repair: If undefined or corrupted, clear session immediately
+                    // Radical cleanup: Purge broken session if data missing or literal undefined
                     if (!cleanName || !cleanPhone || cleanName === 'undefined' || cleanPhone === 'undefined') {
-                        console.warn("Detected broken user data in localStorage. Cleaning up...");
+                        console.warn("Purging corrupted user session from storage...");
                         localStorage.removeItem('dr_science_user');
                         currentUser = null;
                     } else {
                         currentUser = {
                             name: cleanName,
                             phone: cleanPhone,
+                            parentPhone: cleanParentPhone,
                             track: parsed.track || 'علوم (عربي)',
                             stage: parsed.stage || 'المرحلة الإعدادية',
                             grade: parsed.grade || 'الصف الأول الإعدادي',
                             role: parsed.role || 'student'
                         };
-                        // Resave cleaned values back to localStorage
+                        // Write back pure cleaned object
                         localStorage.setItem('dr_science_user', JSON.stringify(currentUser));
                     }
                 } catch (e) {
-                    console.error("Failed to parse user session", e);
+                    console.error("Session parse error", e);
                     localStorage.removeItem('dr_science_user');
                     currentUser = null;
                 }
@@ -616,7 +652,6 @@
         }
 
         async function fetchLessons() {
-            const grid = document.getElementById('lessonsGrid');
             try {
                 const res = await fetch(`${APPS_SCRIPT_URL}?action=getLessons`);
                 const data = await res.json();
@@ -627,7 +662,7 @@
                     useCachedLessons();
                 }
             } catch (err) {
-                console.warn("API fetch error, relying on cache/mock", err);
+                console.warn("API fetch fallback", err);
                 useCachedLessons();
             }
             renderLessons();
@@ -640,15 +675,15 @@
             } else {
                 lessonsList = [
                     {
-                        id: 1,
+                        id: "1",
                         title: "الدرس الأول: المادة وخواصها والتفاعلات الكيميائية",
-                        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                         track: "علوم (عربي)",
                         stage: "المرحلة الإعدادية",
                         grade: "الصف الأول الإعدادي",
-                        description: "شرح تفصيلي ومبسط لخواص المادة وأهم التفاعلات الأولية مع تجارب توضيحية.",
-                        homework: "https://forms.google.com",
-                        notes: "https://drive.google.com"
+                        description: "شرح مبسط لخواص المادة والتفاعلات مع مستر بيشوي ثروت.",
+                        homework: "",
+                        notes: ""
                     }
                 ];
             }
@@ -709,7 +744,7 @@
 
         function playVideo(encodedLesson) {
             if (!currentUser || !currentUser.phone) {
-                showToast('يرجى تسجيل الدخول لمشاهدة الفيديو والدروس', 'info');
+                showToast('يرجى تسجيل الدخول أولاً لمشاهدة الدرس', 'info');
                 openAuthModal('login');
                 return;
             }
@@ -721,9 +756,9 @@
             const wmPhone = document.getElementById('wmPhone');
             const wmName = document.getElementById('wmName');
 
-            // Sanitize user info for watermark display
+            // Pure sanitized values
             const safePhone = cleanPhoneString(currentUser.phone) || '01xxxxxxxx';
-            const safeName = cleanText(currentUser.name) || 'طالب منصة Dr. Science';
+            const safeName = cleanText(currentUser.name) || 'طالب';
 
             wmPhone.textContent = safePhone;
             wmName.textContent = safeName;
@@ -731,7 +766,6 @@
             document.getElementById('videoModalTitle').textContent = cleanText(lesson.title);
             document.getElementById('videoModalDesc').textContent = cleanText(lesson.description || '');
 
-            // Convert URL to embed format if needed
             let embedUrl = lesson.url;
             if (embedUrl.includes('youtube.com/watch?v=')) {
                 const vidId = embedUrl.split('v=')[1].split('&')[0];
@@ -745,13 +779,11 @@
             modal.classList.remove('hidden');
             watermark.classList.remove('hidden');
 
-            // Homework & Notes buttons
             const hwBtn = document.getElementById('homeworkBtn');
             const ntBtn = document.getElementById('notesBtn');
             if (lesson.homework) { hwBtn.href = lesson.homework; hwBtn.classList.remove('hidden'); } else { hwBtn.classList.add('hidden'); }
             if (lesson.notes) { ntBtn.href = lesson.notes; ntBtn.classList.remove('hidden'); } else { ntBtn.classList.add('hidden'); }
 
-            // Enable Anti-Tamper Watermark Observer
             setupWatermarkObserver();
         }
 
@@ -763,12 +795,12 @@
 
             watermarkObserver = new MutationObserver(() => {
                 if (!wm || !container.contains(wm) || wm.style.display === 'none' || wm.style.visibility === 'hidden' || parseFloat(wm.style.opacity || '1') < 0.2) {
-                    showToast('تم اكتشاف محاولة إخفاء العلامة المائية!', 'error');
+                    showToast('تحذير أمني: تم رصد محاولة التلاعب بالعلامة المائية!', 'error');
                     closeVideoModal();
                 }
             });
 
-            watermarkObserver.observe(wm, { attributes: true, style: true });
+            watermarkObserver.observe(wm, { attributes: true, style: true, childList: true, subtree: true });
         }
 
         function closeVideoModal() {
@@ -829,9 +861,9 @@
                 return;
             }
 
-            // Immediately set clean user object from input parameters
+            // Set default object with sanitized input immediately
             currentUser = {
-                name: 'طالب منصة Dr. Science',
+                name: 'طالب',
                 phone: cleanPhone,
                 track: currentTrack,
                 stage: currentStage,
@@ -839,23 +871,26 @@
                 role: 'student'
             };
 
-            // Attempt backend validation
+            // Backend lookup
             try {
                 const res = await fetch(`${APPS_SCRIPT_URL}?action=login&phone=${encodeURIComponent(cleanPhone)}`);
                 const data = await res.json();
                 if (data && data.status === 'success') {
+                    // Surgical cleaning of returned name and phone from Google Sheets
                     if (data.name) currentUser.name = cleanText(data.name);
+                    if (data.phone) currentUser.phone = cleanPhoneString(data.phone);
                     if (data.track) currentUser.track = data.track;
                     if (data.stage) currentUser.stage = data.stage;
                     if (data.grade) currentUser.grade = data.grade;
                 }
             } catch (err) {
-                console.warn("Backend login check bypassed, using verified input data", err);
+                console.warn("Backend check bypassed, using local verified session", err);
             }
 
-            // Clean & Save guaranteed valid object
-            currentUser.name = cleanText(currentUser.name) || 'طالب';
-            currentUser.phone = cleanPhoneString(currentUser.phone);
+            // Final guarantee cleaning
+            currentUser.name = cleanText(currentUser.name) || 'طالب منصة Dr. Science';
+            currentUser.phone = cleanPhoneString(currentUser.phone) || cleanPhone;
+            
             localStorage.setItem('dr_science_user', JSON.stringify(currentUser));
 
             updateUI();
@@ -868,29 +903,36 @@
             e.preventDefault();
             const rawName = document.getElementById('regName').value;
             const rawPhone = document.getElementById('regPhone').value;
+            const rawParentPhone = document.getElementById('regParentPhone').value;
             const track = document.getElementById('regTrack').value;
             const stage = document.getElementById('regStage').value;
             const grade = document.getElementById('regGrade').value;
 
+            // Direct surgical cleaning from inputs
             const cleanName = cleanText(rawName);
             const cleanPhone = cleanPhoneString(rawPhone);
+            const cleanParent = cleanPhoneString(rawParentPhone);
 
             if (!cleanName || !cleanPhone) {
-                showToast('يرجى إدخال جميع البيانات بشكل صحيح', 'error');
+                showToast('يرجى إدخال اسم الطالب ورقم الهاتف بشكل صحيح', 'error');
                 return;
             }
 
-            // RADICAL FIX: Build student profile directly from verified user inputs
+            // Immediately set active student profile directly from inputs to prevent undefined
             currentUser = {
                 name: cleanName,
                 phone: cleanPhone,
+                parentPhone: cleanParent,
                 track: track,
                 stage: stage,
                 grade: grade,
                 role: 'student'
             };
 
-            // Send registration payload to Apps Script
+            // Save to localStorage immediately
+            localStorage.setItem('dr_science_user', JSON.stringify(currentUser));
+
+            // Sync asynchronously with Google Sheet database
             try {
                 await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
@@ -900,21 +942,19 @@
                         action: 'register',
                         name: cleanName,
                         phone: cleanPhone,
+                        parentPhone: cleanParent,
                         track: track,
                         stage: stage,
                         grade: grade
                     })
                 });
             } catch (err) {
-                console.warn("API registration saved locally", err);
+                console.warn("Async register sheet sync", err);
             }
-
-            // Save guaranteed cleaned object into localStorage
-            localStorage.setItem('dr_science_user', JSON.stringify(currentUser));
 
             updateUI();
             closeAuthModal();
-            showToast('تم إنشاء الحساب بنجاح! مرحباً بك.', 'success');
+            showToast(`تم إنشاء الحساب بنجاح! مرحباً بك يا ${cleanName}`, 'success');
             renderLessons();
         }
 
@@ -942,16 +982,15 @@
                 document.getElementById('adminAuthSection').classList.add('hidden');
                 document.getElementById('adminControlsSection').classList.remove('hidden');
                 
-                // Upgrade current user session to admin role
                 if (!currentUser) {
-                    currentUser = { name: 'المستر بيشوي ثروت', phone: '01000000000', role: 'admin' };
+                    currentUser = { name: 'مستر بيشوي ثروت', phone: '01000000000', role: 'admin' };
                 } else {
                     currentUser.role = 'admin';
                 }
                 localStorage.setItem('dr_science_user', JSON.stringify(currentUser));
                 updateUI();
                 renderLessons();
-                showToast('تم الدخول كـ أدمن بنجاح', 'success');
+                showToast('تم الدخول إلى لوحة تحكم الأدمن', 'success');
             } else {
                 showToast('اسم المستخدم أو كلمة السر غير صحيحة', 'error');
             }
@@ -975,11 +1014,9 @@
                 notes: document.getElementById('addNotes').value.trim()
             };
 
-            // Prepend to local state immediately for fast response
             lessonsList.unshift(newLesson);
             localStorage.setItem('dr_science_cached_lessons', JSON.stringify(lessonsList));
 
-            // Sync with backend API
             try {
                 await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
@@ -988,13 +1025,13 @@
                     body: JSON.stringify({ action: 'addLesson', ...newLesson })
                 });
             } catch (err) {
-                console.warn("Backend add sync failed, stored locally", err);
+                console.warn("Backend add sync failed", err);
             }
 
             btn.disabled = false;
             btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر الدرس`;
             closeAdminModal();
-            showToast('تم إضافة الدرس ونشره بنجاح!', 'success');
+            showToast('تم حفظ ونشر الدرس بنجاح!', 'success');
             renderLessons();
         }
 
@@ -1010,7 +1047,7 @@
                     body: JSON.stringify({ action: 'deleteLesson', id: id })
                 });
             } catch (e) {
-                console.warn("Delete request offline sync", e);
+                console.warn("Delete request sync", e);
             }
 
             showToast('تم حذف الدرس بنجاح', 'info');
