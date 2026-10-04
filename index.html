@@ -102,18 +102,18 @@
         }
         .moving-watermark {
             position: absolute;
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255, 255, 255, 0.92);
             font-weight: 800;
             font-size: 0.95rem;
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
             white-space: nowrap;
             transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(11, 19, 43, 0.75);
+            background: rgba(11, 19, 43, 0.85);
             padding: 6px 14px;
             border-radius: 9999px;
-            border: 1px solid rgba(0, 242, 254, 0.5);
-            backdrop-filter: blur(4px);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 242, 254, 0.6);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
         }
     </style>
 </head>
@@ -216,7 +216,6 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Hero Banner Showcase -->
         <section class="mb-10 rounded-3xl glass-card p-6 sm:p-10 relative overflow-hidden shadow-2xl border border-slate-800">
             <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -293,7 +292,7 @@
                     <input type="tel" id="signup-parent-phone" required placeholder="01xxxxxxxxx" class="w-full px-3 py-2.5 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 outline-none transition">
                 </div>
 
-                <!-- NEW TRACK SELECTION FIELDS -->
+                <!-- TRACK SELECTION FIELDS -->
                 <div>
                     <label class="block text-xs font-bold text-cyan-300 mb-1.5"><i class="fa-solid fa-flask ml-1"></i> المسار الدراسي (عربي / لغات)</label>
                     <div class="grid grid-cols-2 gap-3">
@@ -378,17 +377,17 @@
                 </div>
                 <!-- Track Filters -->
                 <div class="flex flex-wrap gap-1.5">
-                    <button onclick="setAdminTrackFilter('ALL')" id="filter-track-ALL" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950">كل المسارات</button>
-                    <button onclick="setAdminTrackFilter('علوم (عربي)')" id="filter-track-AR" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">علوم (عربي)</button>
-                    <button onclick="setAdminTrackFilter('Science (لغات)')" id="filter-track-EN" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">Science (لغات)</button>
+                    <button onclick="setAdminTrackFilter('ALL', event)" id="filter-track-ALL" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950">كل المسارات</button>
+                    <button onclick="setAdminTrackFilter('علوم (عربي)', event)" id="filter-track-AR" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">علوم (عربي)</button>
+                    <button onclick="setAdminTrackFilter('Science (لغات)', event)" id="filter-track-EN" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">Science (لغات)</button>
                 </div>
                 <div class="h-4 w-px bg-slate-700 hidden sm:block"></div>
                 <!-- Stage Filters -->
                 <div class="flex flex-wrap gap-1.5">
-                    <button onclick="setAdminStageFilter('ALL')" id="filter-stage-ALL" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950">كل المراحل</button>
-                    <button onclick="setAdminStageFilter('ابتدائي')" id="filter-stage-ELEM" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">ابتدائي</button>
-                    <button onclick="setAdminStageFilter('إعدادي')" id="filter-stage-MID" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">إعدادي</button>
-                    <button onclick="setAdminStageFilter('ثانوي')" id="filter-stage-HIGH" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">ثانوي</button>
+                    <button onclick="setAdminStageFilter('ALL', event)" id="filter-stage-ALL" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950">كل المراحل</button>
+                    <button onclick="setAdminStageFilter('ابتدائي', event)" id="filter-stage-ELEM" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">ابتدائي</button>
+                    <button onclick="setAdminStageFilter('إعدادي', event)" id="filter-stage-MID" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">إعدادي</button>
+                    <button onclick="setAdminStageFilter('ثانوي', event)" id="filter-stage-HIGH" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">ثانوي</button>
                 </div>
             </div>
 
@@ -445,6 +444,7 @@
         </div>
     </div>
 
+    <!-- Add Lesson Modal -->
     <div id="add-lesson-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-800 relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeAddLessonModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
@@ -559,7 +559,6 @@
     </div>
 
     <script>
-        // GLOBAL APP CONSTANTS & API URLS
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-vS5zdLqM2hxAnoE6-bqdidhw5fytuuMBMvfLaXRbO1TLsZAT4i2rqy4s9r8-ZlPq/exec";
         const ADMIN_USER = "admin";
         const ADMIN_PASS = "QAWSqaws1123xcd#";
@@ -630,7 +629,7 @@
             });
         })();
 
-        // IndexedDB Database Setup
+        // IndexedDB Database Setup & Seed Initial Content
         function initDB() {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open("DrScienceProDB_v2", 1);
@@ -642,10 +641,58 @@
                 };
                 request.onsuccess = (e) => {
                     db = e.target.result;
-                    resolve(db);
+                    seedDefaultLessonsIfEmpty().then(resolve);
                 };
                 request.onerror = (e) => reject(e.target.error);
             });
+        }
+
+        async function seedDefaultLessonsIfEmpty() {
+            const tx = db.transaction("lessons", "readwrite");
+            const store = tx.objectStore("lessons");
+            const countReq = store.count();
+
+            countReq.onsuccess = () => {
+                if (countReq.result === 0) {
+                    const sampleLessons = [
+                        {
+                            id: "sample_1",
+                            title: "تركيب الذرة والمستويات الإلكترونية",
+                            track: "علوم (عربي)",
+                            stage: "إعدادي",
+                            grade: "الصف الثاني الإعدادي",
+                            description: "شرح مبسط لبنية الذرة والتوزيع الإلكتروني ومستويات الطاقة مع أ/ بيشوي ثروت",
+                            videoBlob: null,
+                            videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                            createdAt: new Date().toLocaleDateString("ar-EG")
+                        },
+                        {
+                            id: "sample_2",
+                            title: "Atomic Structure and Chemical Bonding",
+                            track: "Science (لغات)",
+                            stage: "إعدادي",
+                            grade: "الصف الثاني الإعدادي",
+                            description: "Comprehensive study of atomic numbers, isotopes, and ionic bonds by Mr. Bishoy Tharwat",
+                            videoBlob: null,
+                            videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                            createdAt: new Date().toLocaleDateString("ar-EG")
+                        },
+                        {
+                            id: "sample_3",
+                            title: "تفاعلات الأكسدة والاختزال والحركة",
+                            track: "علوم (عربي)",
+                            stage: "إعدادي",
+                            grade: "الصف الثالث الإعدادي",
+                            description: "أهم الأسئلة والتجارب العملية في الكيمياء للشهادة الإعدادية",
+                            videoBlob: null,
+                            videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                            createdAt: new Date().toLocaleDateString("ar-EG")
+                        }
+                    ];
+
+                    sampleLessons.forEach(l => store.add(l));
+                }
+            };
         }
 
         function updateGradeDropdown(stageSelectId, gradeSelectId) {
@@ -779,7 +826,6 @@
                 currentStudent = storedStudent;
                 showToast(`أهلاً بعودتك، ${currentStudent.name}`, "success");
             } else {
-                // Local session fallback
                 currentStudent = {
                     name: "طالب دكتور ساينس",
                     phone: phone,
@@ -891,21 +937,21 @@
             };
         }
 
-        function setAdminStageFilter(filter) {
+        function setAdminStageFilter(filter, evt) {
             adminStageFilter = filter;
             document.querySelectorAll('.admin-stage-btn').forEach(b => {
                 b.className = "admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300";
             });
-            event.target.className = "admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950";
+            evt.target.className = "admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950";
             loadLessons();
         }
 
-        function setAdminTrackFilter(filter) {
+        function setAdminTrackFilter(filter, evt) {
             adminTrackFilter = filter;
             document.querySelectorAll('.admin-track-btn').forEach(b => {
                 b.className = "admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300";
             });
-            event.target.className = "admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950";
+            evt.target.className = "admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950";
             loadLessons();
         }
 
@@ -1030,7 +1076,7 @@
             if (watermarkObserver) watermarkObserver.disconnect();
         }
 
-        // Dynamic Anti-leak Moving Watermark logic
+        // Dynamic Anti-leak Moving Watermark Logic
         function initAntiLeakWatermark() {
             const phoneText = currentStudent ? currentStudent.phone : "Dr. Science Guard";
             document.getElementById("watermark-phone-text").textContent = phoneText + " | Dr. Science";
