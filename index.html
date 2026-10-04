@@ -156,7 +156,7 @@
 
         // Text Sanitizer to prevent XSS
         function sanitizeText(str) {
-            if (!str) return '';
+            if (str === null || str === undefined) return '';
             return String(str)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -513,7 +513,7 @@
                     <textarea id="lesson-desc" rows="2" placeholder="اكتب ملخصاً سريعا لمحتوى الفيديو..." class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-cyan-400"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1">رفع فيديو من الجهاز (يُحفظ بأمان في IndexedDB)</label>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">رفع فيديو من الجهاز (IndexedDB)</label>
                     <input type="file" id="lesson-file" accept="video/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3.5 file:rounded-2xl file:border-0 file:text-xs file:font-bold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20">
                 </div>
                 <div class="text-center text-xs text-slate-500 my-1">- أو -</div>
@@ -528,6 +528,7 @@
         </div>
     </div>
 
+    <!-- Protected Video Player Modal -->
     <div id="video-player-modal" class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
         <div class="w-full max-w-5xl bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 relative flex flex-col">
             <!-- Video Header -->
@@ -566,7 +567,7 @@
     </div>
 
     <script>
-        // TARGET UPDATED GOOGLE APPS SCRIPT URL
+        // TARGET GOOGLE APPS SCRIPT URL
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOhGjv1q0LJJbnbOeBMPUUjPxYPogBj_2Xy9l9Qg2-3tQbptCr_WihgxtjphXTaPK3/exec";
         const ADMIN_USER = "admin";
         const ADMIN_PASS = "QAWSqaws1123xcd#";
@@ -577,7 +578,7 @@
             "ثانوي": ["الصف الأول الثانوي", "الصف الثاني الثانوي", "الصف الثالث الثانوي"]
         };
 
-        let currentStudent = JSON.parse(localStorage.getItem("dr_science_student") || "null");
+        let currentStudent = null;
         let isAdminLoggedIn = localStorage.getItem("dr_science_admin") === "true";
         let adminStageFilter = "ALL";
         let adminTrackFilter = "ALL";
@@ -585,9 +586,32 @@
         let watermarkInterval = null;
         let watermarkObserver = null;
 
+        // Clean stale/mock student data from LocalStorage
+        function cleanObsoleteStorage() {
+            try {
+                const rawStudent = localStorage.getItem("dr_science_student");
+                if (rawStudent) {
+                    const parsed = JSON.parse(rawStudent);
+                    // Check if student object lacks crucial fields or contains dummy mock text
+                    if (!parsed || typeof parsed !== 'object' || !parsed.phone || !parsed.name || parsed.name === "طالب دكتور ساينس" || parsed.phone === "01xxxxxxxxx") {
+                        localStorage.removeItem("dr_science_student");
+                        currentStudent = null;
+                    } else {
+                        currentStudent = parsed;
+                    }
+                } else {
+                    currentStudent = null;
+                }
+            } catch (e) {
+                localStorage.removeItem("dr_science_student");
+                currentStudent = null;
+            }
+        }
+
         // Toast Notification System
         function showToast(message, type = 'info') {
             const container = document.getElementById("toast-container");
+            if (!container) return;
             const toast = document.createElement("div");
             
             const bgClass = type === 'success' ? 'bg-emerald-950/90 border-emerald-500 text-emerald-200' :
@@ -608,7 +632,7 @@
 
             setTimeout(() => {
                 toast.classList.add("opacity-0", "translate-y-[-10px]");
-                setTimeout(() => toast.remove(), 300);
+                setTimeout(() => toast.remove(), 3500);
             }, 3500);
         }
 
@@ -621,26 +645,29 @@
             if (savedTheme === "light") {
                 document.documentElement.classList.remove("dark");
                 document.documentElement.classList.add("light");
-                lightIcon.classList.remove("hidden");
+                if (lightIcon) lightIcon.classList.remove("hidden");
             } else {
                 document.documentElement.classList.add("dark");
                 document.documentElement.classList.remove("light");
-                darkIcon.classList.remove("hidden");
+                if (darkIcon) darkIcon.classList.remove("hidden");
             }
 
-            document.getElementById("theme-toggle").addEventListener("click", () => {
-                const isDark = document.documentElement.classList.toggle("dark");
-                document.documentElement.classList.toggle("light", !isDark);
-                localStorage.setItem("dr_science_theme", isDark ? "dark" : "light");
-                darkIcon.classList.toggle("hidden", !isDark);
-                lightIcon.classList.toggle("hidden", isDark);
-            });
+            const themeBtn = document.getElementById("theme-toggle");
+            if (themeBtn) {
+                themeBtn.addEventListener("click", () => {
+                    const isDark = document.documentElement.classList.toggle("dark");
+                    document.documentElement.classList.toggle("light", !isDark);
+                    localStorage.setItem("dr_science_theme", isDark ? "dark" : "light");
+                    if (darkIcon) darkIcon.classList.toggle("hidden", !isDark);
+                    if (lightIcon) lightIcon.classList.toggle("hidden", isDark);
+                });
+            }
         })();
 
-        // IndexedDB Database Setup
+        // IndexedDB Database Setup - NO DEFAULT MOCK LESSONS
         function initDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open("DrScienceProDB_v4", 1);
+                const request = indexedDB.open("DrScienceProDB_v5", 1);
                 request.onupgradeneeded = (e) => {
                     const database = e.target.result;
                     if (!database.objectStoreNames.contains("lessons")) {
@@ -649,57 +676,10 @@
                 };
                 request.onsuccess = (e) => {
                     db = e.target.result;
-                    seedDefaultLessonsIfEmpty().then(resolve);
+                    resolve();
                 };
                 request.onerror = (e) => reject(e.target.error);
             });
-        }
-
-        async function seedDefaultLessonsIfEmpty() {
-            const tx = db.transaction("lessons", "readwrite");
-            const store = tx.objectStore("lessons");
-            const countReq = store.count();
-
-            countReq.onsuccess = () => {
-                if (countReq.result === 0) {
-                    const sampleLessons = [
-                        {
-                            id: "sample_1",
-                            title: "تركيب الذرة والمستويات الإلكترونية",
-                            track: "علوم (عربي)",
-                            stage: "إعدادي",
-                            grade: "الصف الثاني الإعدادي",
-                            description: "شرح مبسط لبنية الذرة والتوزيع الإلكتروني ومستويات الطاقة مع أ/ بيشوي ثروت",
-                            videoBlob: null,
-                            videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                            createdAt: new Date().toLocaleDateString("ar-EG")
-                        },
-                        {
-                            id: "sample_2",
-                            title: "Atomic Structure and Chemical Bonding",
-                            track: "Science (لغات)",
-                            stage: "إعدادي",
-                            grade: "الصف الثاني الإعدادي",
-                            description: "Comprehensive study of atomic numbers, isotopes, and ionic bonds by Mr. Bishoy Tharwat",
-                            videoBlob: null,
-                            videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-                            createdAt: new Date().toLocaleDateString("ar-EG")
-                        },
-                        {
-                            id: "sample_3",
-                            title: "تفاعلات الأكسدة والاختزال والحركة",
-                            track: "علوم (عربي)",
-                            stage: "إعدادي",
-                            grade: "الصف الثالث الإعدادي",
-                            description: "أهم الأسئلة والتجارب العملية في الكيمياء للشهادة الإعدادية",
-                            videoBlob: null,
-                            videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                            createdAt: new Date().toLocaleDateString("ar-EG")
-                        }
-                    ];
-                    sampleLessons.forEach(l => store.add(l));
-                }
-            };
         }
 
         // GOOGLE SHEETS DIRECT API INTEGRATION FUNCTIONS
@@ -715,24 +695,33 @@
                     const tx = db.transaction("lessons", "readwrite");
                     const store = tx.objectStore("lessons");
                     
+                    // Clear cached local store to guarantee synchronization
+                    await new Promise((res) => {
+                        const clearReq = store.clear();
+                        clearReq.onsuccess = res;
+                        clearReq.onerror = res;
+                    });
+                    
                     data.lessons.forEach(l => {
-                        store.put({
-                            id: l.id || "sheet_" + Date.now(),
-                            title: l.title || "درس جديد",
-                            track: l.track || "علوم (عربي)",
-                            stage: l.stage || "إعدادي",
-                            grade: l.grade || "الصف الأول الإعدادي",
-                            description: l.description || "",
-                            videoUrl: l.videoUrl || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                            videoBlob: null,
-                            createdAt: l.createdAt || new Date().toLocaleDateString("ar-EG")
-                        });
+                        if (l && (l.title || l.videoUrl || l.id)) {
+                            store.put({
+                                id: String(l.id || "sheet_" + Date.now() + "_" + Math.random().toString(36).substring(2, 6)),
+                                title: sanitizeText(l.title || "درس بدون عنوان"),
+                                track: l.track || "علوم (عربي)",
+                                stage: l.stage || "إعدادي",
+                                grade: l.grade || "الصف الأول الإعدادي",
+                                description: sanitizeText(l.description || ""),
+                                videoUrl: l.videoUrl || "",
+                                videoBlob: null,
+                                createdAt: l.createdAt || new Date().toLocaleDateString("ar-EG")
+                            });
+                        }
                     });
                     
                     showToast("تم تحديث الدروس من Google Sheets بنجاح", "success");
                 }
             } catch (err) {
-                console.warn("Sheet fetch skipped or offline, using local DB cache.");
+                console.warn("Sheet fetch skipped or offline, displaying current cache.");
             } finally {
                 if (syncIcon) syncIcon.classList.remove("animate-spin");
                 loadLessons();
@@ -755,7 +744,7 @@
                     })
                 });
             } catch (e) {
-                console.warn("Cloud sheet sync failed, offline mode retained.");
+                console.warn("Cloud sheet sync failed, local copy saved.");
             }
         }
 
@@ -771,7 +760,7 @@
                     })
                 });
             } catch (e) {
-                console.warn("Cloud delete failed, deleting locally.");
+                console.warn("Cloud delete failed, local item removed.");
             }
         }
 
@@ -817,17 +806,17 @@
             const adminFilterBar = document.getElementById("admin-filter-bar");
             const adminBadge = document.getElementById("admin-status-badge");
 
-            if (currentStudent) {
+            if (currentStudent && currentStudent.name) {
                 authContainer.classList.add("hidden");
                 dashboard.classList.remove("hidden");
                 userHeader.classList.remove("hidden");
                 
                 document.getElementById("header-user-name").textContent = currentStudent.name;
                 document.getElementById("dash-student-name").textContent = currentStudent.name;
-                document.getElementById("dash-student-stage").textContent = currentStudent.stage;
-                document.getElementById("dash-student-grade").textContent = currentStudent.grade;
+                document.getElementById("dash-student-stage").textContent = currentStudent.stage || "المرحلة";
+                document.getElementById("dash-student-grade").textContent = currentStudent.grade || "الصف الدراسي";
                 document.getElementById("dash-student-track").textContent = currentStudent.track || 'علوم (عربي)';
-                document.getElementById("dash-student-phone").textContent = currentStudent.phone;
+                document.getElementById("dash-student-phone").textContent = currentStudent.phone || 'بدون رقم';
 
                 loadLessons();
             } else {
@@ -858,8 +847,16 @@
             const parentPhone = document.getElementById("signup-parent-phone").value.trim();
             const stage = document.getElementById("signup-stage").value;
             const grade = document.getElementById("signup-grade").value;
-            const track = document.querySelector('input[name="signup-track"]:checked').value;
+            const trackEl = document.querySelector('input[name="signup-track"]:checked');
+            const track = trackEl ? trackEl.value : 'علوم (عربي)';
             const password = document.getElementById("signup-password").value;
+
+            if (!name || !phone || !stage || !grade || !password) {
+                showToast("يرجى ملء كافة البيانات المطلوبة!", "error");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "إنشاء حساب جديد";
+                return;
+            }
 
             const studentData = { 
                 action: "signup", 
@@ -879,20 +876,17 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(studentData)
                 });
-
-                currentStudent = studentData;
-                localStorage.setItem("dr_science_student", JSON.stringify(studentData));
-                showToast("تم إنشاء الحساب بنجاح! مرحباً بك في دكتور ساينس", "success");
-                updateUIState();
             } catch (err) {
-                currentStudent = studentData;
-                localStorage.setItem("dr_science_student", JSON.stringify(studentData));
-                showToast("تم الدخول للمنصة بنجاح!", "success");
-                updateUIState();
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = "إنشاء حساب جديد";
+                console.warn("Sheet signup sync skipped.");
             }
+
+            currentStudent = studentData;
+            localStorage.setItem("dr_science_student", JSON.stringify(studentData));
+            showToast("تم إنشاء الحساب بنجاح! مرحباً بك في دكتور ساينس", "success");
+            updateUIState();
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = "إنشاء حساب جديد";
         }
 
         function handleStudentLogin(e) {
@@ -900,18 +894,34 @@
             const phone = document.getElementById("login-phone").value.trim();
             const password = document.getElementById("login-password").value;
 
-            const storedStudent = JSON.parse(localStorage.getItem("dr_science_student") || "null");
+            if (!phone || !password) {
+                showToast("يرجى كتابة رقم الهاتف وكلمة السر", "error");
+                return;
+            }
 
-            if (storedStudent && storedStudent.phone === phone && storedStudent.password === password) {
+            const storedStudentRaw = localStorage.getItem("dr_science_student");
+            let storedStudent = null;
+            try {
+                storedStudent = storedStudentRaw ? JSON.parse(storedStudentRaw) : null;
+            } catch(err) {
+                storedStudent = null;
+            }
+
+            if (storedStudent && storedStudent.phone === phone) {
+                if (storedStudent.password && storedStudent.password !== password) {
+                    showToast("كلمة السر غير صحيحة!", "error");
+                    return;
+                }
                 currentStudent = storedStudent;
                 showToast(`أهلاً بعودتك، ${currentStudent.name}`, "success");
             } else {
+                // If not registered in local storage, login with entered details
                 currentStudent = {
                     name: "طالب دكتور ساينس",
                     phone: phone,
-                    parentPhone: "01000000000",
+                    parentPhone: "",
                     stage: "إعدادي",
-                    grade: "الصف الثاني الإعدادي",
+                    grade: "الصف الأول الإعدادي",
                     track: "علوم (عربي)",
                     password: password
                 };
@@ -967,7 +977,8 @@
             saveBtn.textContent = "جاري حفظ ونشر الفيديو...";
 
             const title = document.getElementById("lesson-title").value.trim();
-            const track = document.querySelector('input[name="lesson-track"]:checked').value;
+            const trackEl = document.querySelector('input[name="lesson-track"]:checked');
+            const track = trackEl ? trackEl.value : "علوم (عربي)";
             const stage = document.getElementById("lesson-stage").value;
             const grade = document.getElementById("lesson-grade").value;
             const description = document.getElementById("lesson-desc").value.trim();
@@ -982,21 +993,21 @@
             const lessonObj = {
                 id: "lesson_" + Date.now(),
                 title: sanitizeText(title),
-                track: track, // 'علوم (عربي)', 'Science (لغات)', or 'BOTH'
+                track: track,
                 stage: stage,
                 grade: grade,
                 description: sanitizeText(description),
                 videoBlob: videoBlob,
-                videoUrl: urlInput || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                videoUrl: urlInput || "",
                 createdAt: new Date().toLocaleDateString("ar-EG")
             };
 
-            // Save to Local DB
+            // Save to IndexedDB
             const tx = db.transaction("lessons", "readwrite");
             const store = tx.objectStore("lessons");
             store.add(lessonObj);
 
-            // Sync with Google Sheets via API
+            // Sync with Google Sheets
             await addLessonToSheet(lessonObj);
 
             tx.oncomplete = () => {
@@ -1013,11 +1024,9 @@
         }
 
         async function deleteLesson(id) {
-            // Delete from IndexedDB
             const tx = db.transaction("lessons", "readwrite");
             tx.objectStore("lessons").delete(id);
             
-            // Delete from Google Sheets via API (Action: deleteLesson)
             await deleteLessonFromSheet(id);
 
             tx.oncomplete = () => {
@@ -1046,7 +1055,10 @@
 
         function loadLessons() {
             const container = document.getElementById("lessons-grid");
+            if (!container) return;
             container.innerHTML = "";
+
+            if (!db) return;
 
             const tx = db.transaction("lessons", "readonly");
             const store = tx.objectStore("lessons");
@@ -1064,7 +1076,7 @@
                         return stageMatch && gradeMatch && trackMatch;
                     });
                 } 
-                // Admin Control Filter Logic
+                // Admin Filter Logic
                 else if (isAdminLoggedIn) {
                     if (adminStageFilter !== "ALL") {
                         lessons = lessons.filter(l => l.stage === adminStageFilter);
@@ -1074,12 +1086,13 @@
                     }
                 }
 
+                // REQUIREMENT #1 STRICT EMPTY STATE (NO MOCK DATA)
                 if (lessons.length === 0) {
                     container.innerHTML = `
                         <div class="col-span-full py-12 sm:py-16 text-center text-slate-400 glass-card rounded-3xl border border-slate-800 px-4">
                             <i class="fa-solid fa-folder-open text-4xl sm:text-5xl mb-3 text-cyan-500/50"></i>
-                            <p class="font-extrabold text-base sm:text-lg text-white">لا توجد دروس متاحة حالياً لمسارك المختار</p>
-                            <p class="text-xs text-slate-500 mt-1">سيتم رفعه وتخصيصه قريباً من مستر بيشوي ثروت</p>
+                            <p class="font-extrabold text-base sm:text-lg text-white">لا يوجد دروس حالياً</p>
+                            <p class="text-xs text-slate-500 mt-1">سيتم إضافة الدروس قريباً عبر Google Sheets من قبل مستر بيشوي ثروت</p>
                         </div>
                     `;
                     return;
@@ -1089,7 +1102,6 @@
                     const card = document.createElement("div");
                     card.className = "glass-card rounded-3xl border border-slate-800 shadow-xl hover:border-cyan-500/40 transition transform hover:-translate-y-1 overflow-hidden flex flex-col justify-between";
                     
-                    // Track Badge Style
                     let trackBadgeHtml = '';
                     if (lesson.track === 'Science (لغات)') {
                         trackBadgeHtml = `<span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 font-extrabold text-[10px]">Science (لغات)</span>`;
@@ -1114,12 +1126,12 @@
                                 </div>
                             </div>
                             <div class="p-5 space-y-2">
-                                <h4 class="font-extrabold text-sm sm:text-base text-white leading-snug">${lesson.title}</h4>
-                                <p class="text-xs text-slate-400 line-clamp-2">${lesson.description || 'شرح وحل أسئلة تفاعلية مع مستر بيشوي ثروت'}</p>
+                                <h4 class="font-extrabold text-sm sm:text-base text-white leading-snug">${sanitizeText(lesson.title)}</h4>
+                                <p class="text-xs text-slate-400 line-clamp-2">${sanitizeText(lesson.description) || 'شرح وحل أسئلة تفاعلية مع مستر بيشوي ثروت'}</p>
                             </div>
                         </div>
                         <div class="p-5 pt-0 flex items-center justify-between border-t border-slate-800/80 mt-3 text-xs text-slate-500">
-                            <span><i class="fa-regular fa-clock ml-1"></i> ${lesson.createdAt}</span>
+                            <span><i class="fa-regular fa-clock ml-1"></i> ${lesson.createdAt || ''}</span>
                             ${isAdminLoggedIn ? `<button onclick="deleteLesson('${lesson.id}')" class="text-rose-400 hover:text-rose-300 font-bold px-2 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 transition"><i class="fa-solid fa-trash ml-1"></i> حذف فوراً</button>` : ''}
                         </div>
                     `;
@@ -1143,12 +1155,15 @@
 
                 if (lesson.videoBlob) {
                     mainVideo.src = URL.createObjectURL(lesson.videoBlob);
-                } else {
+                } else if (lesson.videoUrl) {
                     mainVideo.src = lesson.videoUrl;
+                } else {
+                    showToast("رابط الفيديو غير صالح!", "error");
+                    return;
                 }
 
                 videoModal.classList.remove("hidden");
-                mainVideo.play();
+                mainVideo.play().catch(() => {});
 
                 initAntiLeakWatermark();
             };
@@ -1157,9 +1172,11 @@
         function closeVideoPlayer() {
             const videoModal = document.getElementById("video-player-modal");
             const mainVideo = document.getElementById("main-video");
-            mainVideo.pause();
-            mainVideo.src = "";
-            videoModal.classList.add("hidden");
+            if (mainVideo) {
+                mainVideo.pause();
+                mainVideo.src = "";
+            }
+            if (videoModal) videoModal.classList.add("hidden");
 
             if (watermarkInterval) clearInterval(watermarkInterval);
             if (watermarkObserver) watermarkObserver.disconnect();
@@ -1167,8 +1184,11 @@
 
         // Dynamic Anti-leak Moving Watermark Logic with MutationObserver
         function initAntiLeakWatermark() {
-            const phoneText = currentStudent ? currentStudent.phone : "Dr. Science Guard";
-            document.getElementById("watermark-phone-text").textContent = phoneText + " | Dr. Science";
+            const phoneText = (currentStudent && currentStudent.phone) ? currentStudent.phone : "Dr. Science";
+            const watermarkPhone = document.getElementById("watermark-phone-text");
+            if (watermarkPhone) {
+                watermarkPhone.textContent = phoneText + " | Dr. Science";
+            }
 
             const watermarkEl = document.getElementById("moving-watermark");
             const container = document.getElementById("video-container");
@@ -1178,8 +1198,8 @@
                 const maxX = container.clientWidth - watermarkEl.clientWidth - 20;
                 const maxY = container.clientHeight - watermarkEl.clientHeight - 20;
 
-                const randomX = Math.max(10, Math.floor(Math.random() * maxX));
-                const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+                const randomX = Math.max(10, Math.floor(Math.random() * Math.max(maxX, 10)));
+                const randomY = Math.max(10, Math.floor(Math.random() * Math.max(maxY, 10)));
 
                 watermarkEl.style.left = randomX + "px";
                 watermarkEl.style.top = randomY + "px";
@@ -1197,7 +1217,6 @@
                 const node = document.getElementById("moving-watermark");
                 const video = document.getElementById("main-video");
 
-                // Immediately halt playback if DOM inspection or element tampering occurs
                 if (!layer || !node || !container.contains(layer) || window.getComputedStyle(node).display === "none" || window.getComputedStyle(node).opacity === "0") {
                     if (video) video.pause();
                     closeVideoPlayer();
@@ -1205,10 +1224,13 @@
                 }
             });
 
-            watermarkObserver.observe(container, { childList: true, subtree: true, attributes: true });
+            if (container) {
+                watermarkObserver.observe(container, { childList: true, subtree: true, attributes: true });
+            }
         }
 
         window.onload = async function() {
+            cleanObsoleteStorage();
             await initDB();
             updateUIState();
             fetchLessonsFromSheet();
