@@ -66,7 +66,7 @@
             font-family: 'Poppins', sans-serif;
         }
         .glass-card {
-            background: rgba(28, 37, 65, 0.7);
+            background: rgba(28, 37, 65, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -77,13 +77,12 @@
             border: 1px solid rgba(0, 0, 0, 0.08);
         }
         .glass-header {
-            background: rgba(11, 19, 43, 0.9);
+            background: rgba(11, 19, 43, 0.92);
             backdrop-filter: blur(14px);
         }
         .light .glass-header {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
         }
-        /* Custom Mobile Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -95,7 +94,6 @@
             background: linear-gradient(to bottom, #4facfe, #00f2fe);
             border-radius: 999px;
         }
-        /* Anti-Leak Dynamic Moving Watermark */
         #watermark-layer {
             pointer-events: none;
             z-index: 60;
@@ -568,7 +566,8 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyIoPPX_q_sTWCkeTu1e0kTwybuRGBzk31uUwYY0jwoRweW5fHBOJkt-BAAOGR4lw/exec";
+        // TARGET UPDATED GOOGLE APPS SCRIPT URL
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOhGjv1q0LJJbnbOeBMPUUjPxYPogBj_2Xy9l9Qg2-3tQbptCr_WihgxtjphXTaPK3/exec";
         const ADMIN_USER = "admin";
         const ADMIN_PASS = "QAWSqaws1123xcd#";
 
@@ -641,7 +640,7 @@
         // IndexedDB Database Setup
         function initDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open("DrScienceProDB_v3", 1);
+                const request = indexedDB.open("DrScienceProDB_v4", 1);
                 request.onupgradeneeded = (e) => {
                     const database = e.target.result;
                     if (!database.objectStoreNames.contains("lessons")) {
@@ -1018,7 +1017,7 @@
             const tx = db.transaction("lessons", "readwrite");
             tx.objectStore("lessons").delete(id);
             
-            // Delete from Google Sheets via API
+            // Delete from Google Sheets via API (Action: deleteLesson)
             await deleteLessonFromSheet(id);
 
             tx.oncomplete = () => {
@@ -1166,7 +1165,7 @@
             if (watermarkObserver) watermarkObserver.disconnect();
         }
 
-        // Dynamic Anti-leak Moving Watermark Logic
+        // Dynamic Anti-leak Moving Watermark Logic with MutationObserver
         function initAntiLeakWatermark() {
             const phoneText = currentStudent ? currentStudent.phone : "Dr. Science Guard";
             document.getElementById("watermark-phone-text").textContent = phoneText + " | Dr. Science";
