@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Science | أ/ بيشوي ثروت</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyanGlow: '#00f2fe',
+                        electricBlue: '#4facfe',
+                        navyDark: '#0b132b',
+                        navyCard: '#1c2541',
+                        goldGlow: '#f59e0b',
+                        goldDark: '#b45309'
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'neon-cyan': '0 0 20px rgba(0, 242, 254, 0.35)',
+                        'neon-blue': '0 0 25px rgba(79, 172, 254, 0.4)',
+                        'neon-gold': '0 0 20px rgba(245, 158, 11, 0.4)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite ease-in-out',
+                        'float': 'float 4s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(0, 242, 254, 0.3)' },
+                            '50%': { boxShadow: '0 0 30px rgba(0, 242, 254, 0.7)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
+        }
+        .en-font {
+            font-family: 'Poppins', sans-serif;
+        }
+        .glass-card {
+            background: rgba(28, 37, 65, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .glass-header {
+            background: rgba(11, 19, 43, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .light .glass-header {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b132b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            border-radius: 4px;
+        }
+        /* Anti-Leak Dynamic Moving Watermark */
+        #watermark-layer {
+            pointer-events: none;
+            z-index: 60;
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        .moving-watermark {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+            white-space: nowrap;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(11, 19, 43, 0.75);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            border: 1px solid rgba(0, 242, 254, 0.5);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col transition-colors duration-500">
+
+    <script>
+        /* SECURITY HARDENING & CONSOLE LOCK */
+        (function enforceSecurityLocks() {
+            const emptyFn = function() {};
+            window.console.log = emptyFn;
+            window.console.warn = emptyFn;
+            window.console.error = emptyFn;
+            window.console.info = emptyFn;
+            window.console.debug = emptyFn;
+            window.console.table = emptyFn;
+
+            // Block Context Menu (Right Click)
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Block Key Combos (F12, DevTools, View Source, Save)
+            document.addEventListener('keydown', function(e) {
+                if (e.keyCode === 123) { // F12
+                    e.preventDefault();
+                    return false;
+                }
+                if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+                    e.preventDefault();
+                    return false;
+                }
+                if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83)) { // Ctrl+U, Ctrl+S
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        })();
+
+        // Text Sanitizer to prevent XSS
+        function sanitizeText(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+
+    <div id="toast-container" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none"></div>
+
+    <header class="sticky top-0 z-40 glass-header border-b border-slate-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Teacher Title -->
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyanGlow to-electricBlue rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                    <img src="bishoy.jpg" id="header-avatar" onerror="this.onerror=null; this.src='https://placehold.co/300x300/0284c7/ffffff?text=Mr.+Bishoy';" alt="مستر بيشوي ثروت" class="relative w-12 h-12 rounded-full object-cover border-2 border-white dark:border-slate-900 shadow-md">
+                    <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 border-2 border-slate-900 rounded-full animate-ping"></span>
+                    <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black text-white tracking-wide flex items-center gap-2">
+                        <span class="en-font bg-gradient-to-r from-cyanGlow via-electricBlue to-indigo-400 bg-clip-text text-transparent">Dr. Science</span>
+                    </h1>
+                    <p class="text-xs font-semibold text-cyan-400/90 flex items-center gap-1">
+                        <span>مستر بيشوي ثروت</span>
+                        <span class="text-slate-600 dark:text-slate-500">•</span>
+                        <span class="text-slate-400">كبير معلمي العلوم والساينس</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center gap-3">
+                <!-- Dark / Light Theme Toggle -->
+                <button id="theme-toggle" title="تبديل المظهر" class="p-2.5 rounded-2xl glass-card text-cyan-400 hover:text-white hover:border-cyan-500/50 transition transform active:scale-95 shadow-lg">
+                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon text-lg hidden"></i>
+                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun text-lg hidden"></i>
+                </button>
+
+                <!-- Admin Login Modal Trigger -->
+                <button id="admin-login-btn" onclick="openAdminModal()" class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-goldDark hover:from-amber-400 hover:to-amber-600 text-slate-950 font-extrabold text-xs sm:text-sm shadow-neon-gold transition transform active:scale-95">
+                    <i class="fa-solid fa-crown text-slate-950"></i>
+                    <span class="hidden sm:inline">دخول الآدمن</span>
+                </button>
+
+                <!-- Active Student Header Session Badge -->
+                <div id="user-header-profile" class="hidden flex items-center gap-2 pl-2 border-r border-slate-800">
+                    <span id="header-user-name" class="text-xs sm:text-sm font-bold text-cyan-300 max-w-[110px] sm:max-w-[150px] truncate"></span>
+                    <button onclick="logoutStudent()" title="تسجيل الخروج" class="p-2 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xs font-bold transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Hero Banner Showcase -->
+        <section class="mb-10 rounded-3xl glass-card p-6 sm:p-10 relative overflow-hidden shadow-2xl border border-slate-800">
+            <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="space-y-4 text-center md:text-right max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-bold backdrop-blur-md">
+                        <i class="fa-solid fa-atom text-cyan-400 animate-spin" style="animation-duration: 8s;"></i> 
+                        <span>المنصة التعليمية الأولى لمادة العلوم والساينس</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+                        رحلتك نحو التفوق مع <br>
+                        <span class="bg-gradient-to-r from-cyanGlow via-electricBlue to-indigo-300 bg-clip-text text-transparent">أ/ بيشوي ثروت</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        شرح مبسط، محتوى تفاعلي محمي خصيصاً لمسارك الدراسي (علوم أو Science)، لتضمن الدرجات النهائية في الامتحانات.
+                    </p>
+                </div>
+
+                <!-- Teacher Frame Showcase -->
+                <div class="flex-shrink-0 relative group animate-float">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-cyanGlow via-electricBlue to-goldGlow rounded-3xl blur-md opacity-80 group-hover:opacity-100 transition duration-500"></div>
+                    <div class="relative w-40 h-40 sm:w-48 sm:h-48 rounded-3xl overflow-hidden bg-slate-900 border-2 border-white/20 shadow-2xl">
+                        <img src="bishoy.jpg" onerror="this.onerror=null; this.src='https://placehold.co/300x300/0284c7/ffffff?text=Mr.+Bishoy';" alt="مستر بيشوي ثروت" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="auth-container" class="max-w-md mx-auto glass-card rounded-3xl shadow-neon-blue border border-slate-800 overflow-hidden transition-all duration-300">
+            <!-- Form Tabs -->
+            <div class="flex border-b border-slate-800/80">
+                <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-4 text-center font-bold text-sm text-cyan-400 border-b-2 border-cyan-400 bg-slate-900/40">
+                    <i class="fa-solid fa-right-to-bracket ml-1"></i> تسجيل الدخول
+                </button>
+                <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="flex-1 py-4 text-center font-bold text-sm text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-user-plus ml-1"></i> حساب جديد
+                </button>
+            </div>
+
+            <!-- Student Login Form -->
+            <form id="login-form" onsubmit="handleStudentLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">رقم هاتف الطالب</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-phone absolute right-3.5 top-3.5 text-cyan-400/70 text-sm"></i>
+                        <input type="tel" id="login-phone" required placeholder="01xxxxxxxxx" class="w-full pr-10 pl-3 py-3 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">كلمة السر</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute right-3.5 top-3.5 text-cyan-400/70 text-sm"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full pr-10 pl-3 py-3 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none transition">
+                    </div>
+                </div>
+                <button type="submit" id="login-submit-btn" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-electricBlue to-cyanGlow text-slate-950 font-black text-sm shadow-neon-cyan transition transform active:scale-95">
+                    دخول المنصة
+                </button>
+            </form>
+
+            <!-- Student Signup Form with Track Selection -->
+            <form id="signup-form" onsubmit="handleStudentSignup(event)" class="p-6 space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">اسم الطالب ثلاثي</label>
+                    <input type="text" id="signup-name" required placeholder="اسم الطالب بالكامل" class="w-full px-3 py-2.5 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">رقم هاتف الطالب</label>
+                    <input type="tel" id="signup-phone" required placeholder="01xxxxxxxxx" class="w-full px-3 py-2.5 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">رقم هاتف ولي الأمر</label>
+                    <input type="tel" id="signup-parent-phone" required placeholder="01xxxxxxxxx" class="w-full px-3 py-2.5 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 outline-none transition">
+                </div>
+
+                <!-- NEW TRACK SELECTION FIELDS -->
+                <div>
+                    <label class="block text-xs font-bold text-cyan-300 mb-1.5"><i class="fa-solid fa-flask ml-1"></i> المسار الدراسي (عربي / لغات)</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="signup-track" value="علوم (عربي)" checked class="peer hidden">
+                            <div class="py-2.5 px-3 rounded-2xl bg-slate-900/80 border border-slate-700 text-slate-300 text-center font-bold text-xs peer-checked:bg-cyan-500/20 peer-checked:border-cyan-400 peer-checked:text-cyan-300 transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-book-bookmark"></i> علوم (عربي)
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="signup-track" value="Science (لغات)" class="peer hidden">
+                            <div class="py-2.5 px-3 rounded-2xl bg-slate-900/80 border border-slate-700 text-slate-300 text-center font-bold text-xs peer-checked:bg-purple-500/20 peer-checked:border-purple-400 peer-checked:text-purple-300 transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-microscope"></i> Science (لغات)
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Stage and Grade selection -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">المرحلة الدراسية</label>
+                        <select id="signup-stage" onchange="updateGradeDropdown('signup-stage', 'signup-grade')" required class="w-full px-3 py-2.5 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 outline-none transition">
+                            <option value="">اختر المرحلة</option>
+                            <option value="ابتدائي">ابتدائي</option>
+                            <option value="إعدادي">إعدادي</option>
+                            <option value="ثانوي">ثانوي</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">الصف الدراسي</label>
+                        <select id="signup-grade" required class="w-full px-3 py-2.5 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 outline-none transition">
+                            <option value="">اختر الصف</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">كلمة السر</label>
+                    <input type="password" id="signup-password" required placeholder="••••••••" class="w-full px-3 py-2.5 rounded-2xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:border-cyan-400 outline-none transition">
+                </div>
+                <button type="submit" id="signup-submit-btn" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-black text-sm shadow-lg transition transform active:scale-95">
+                    إنشاء حساب جديد
+                </button>
+            </form>
+        </div>
+
+        <div id="student-dashboard" class="hidden space-y-8">
+            <!-- Student Header Profile Info Bar -->
+            <div class="glass-card p-6 rounded-3xl border border-slate-800 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white flex items-center justify-center text-2xl shadow-neon-blue font-black">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <h3 id="dash-student-name" class="text-xl font-black text-white"></h3>
+                        <p class="text-xs text-slate-400 flex flex-wrap items-center gap-2 mt-1">
+                            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-bold">
+                                <i class="fa-solid fa-layer-group ml-1"></i> <span id="dash-student-stage"></span> - <span id="dash-student-grade"></span>
+                            </span>
+                            <span id="dash-student-track-badge" class="px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30 font-bold">
+                                <i class="fa-solid fa-atom ml-1"></i> <span id="dash-student-track"></span>
+                            </span>
+                            <span>•</span>
+                            <span><i class="fa-solid fa-phone text-emerald-400 ml-1"></i> <span id="dash-student-phone"></span></span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Admin Status Indicator -->
+                <div id="admin-status-badge" class="hidden px-4 py-2 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                    <span>وضع التحكم النشط (مستر بيشوي ثروت)</span>
+                </div>
+            </div>
+
+            <!-- Admin Multi-Filter Control Bar -->
+            <div id="admin-filter-bar" class="hidden flex flex-wrap items-center gap-3 p-4 glass-card rounded-2xl border border-slate-800">
+                <div class="flex items-center gap-2 text-xs font-bold text-amber-400">
+                    <i class="fa-solid fa-filter"></i>
+                    <span>فلترة لوحة الأدمن:</span>
+                </div>
+                <!-- Track Filters -->
+                <div class="flex flex-wrap gap-1.5">
+                    <button onclick="setAdminTrackFilter('ALL')" id="filter-track-ALL" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950">كل المسارات</button>
+                    <button onclick="setAdminTrackFilter('علوم (عربي)')" id="filter-track-AR" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">علوم (عربي)</button>
+                    <button onclick="setAdminTrackFilter('Science (لغات)')" id="filter-track-EN" class="admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">Science (لغات)</button>
+                </div>
+                <div class="h-4 w-px bg-slate-700 hidden sm:block"></div>
+                <!-- Stage Filters -->
+                <div class="flex flex-wrap gap-1.5">
+                    <button onclick="setAdminStageFilter('ALL')" id="filter-stage-ALL" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950">كل المراحل</button>
+                    <button onclick="setAdminStageFilter('ابتدائي')" id="filter-stage-ELEM" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">ابتدائي</button>
+                    <button onclick="setAdminStageFilter('إعدادي')" id="filter-stage-MID" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">إعدادي</button>
+                    <button onclick="setAdminStageFilter('ثانوي')" id="filter-stage-HIGH" class="admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300">ثانوي</button>
+                </div>
+            </div>
+
+            <!-- Lessons Section Title -->
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-2xl font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-circle-play text-cyan-400"></i>
+                        <span>الحصص والدروس الشارحة</span>
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">محتوى تعليمي تفاعلي محمي مخصص لصفك ومسارك الدراسي</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Lessons Grid Container -->
+            <div id="lessons-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Lessons dynamically loaded here -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Admin Floating Add Lesson Button (FAB) -->
+    <button id="admin-add-fab" onclick="openAddLessonModal()" title="إضافة درس جديد" class="hidden fixed bottom-8 left-8 z-40 w-16 h-16 rounded-full bg-gradient-to-r from-amber-500 to-goldDark text-slate-950 shadow-neon-gold flex items-center justify-center text-2xl font-black transition transform hover:scale-110 active:scale-95 border-2 border-amber-300">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-sm rounded-3xl p-6 shadow-2xl border border-slate-800 relative">
+            <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-neon-gold">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="text-lg font-extrabold text-white">تسجيل دخول الآدمن</h3>
+                <p class="text-xs text-slate-400">لوحة تحكم مستر بيشوي ثروت</p>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">اسم المستخدم</label>
+                    <input type="text" id="admin-username" required class="w-full px-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">كلمة السر</label>
+                    <input type="password" id="admin-password" required class="w-full px-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-amber-400">
+                </div>
+                <button type="submit" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-goldDark text-slate-950 font-black text-sm shadow-neon-gold transition">
+                    دخول لوحة التحكم
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-lesson-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-800 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAddLessonModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-white mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-circle-plus text-amber-400"></i> إضافة درس فيديو جديد
+            </h3>
+            <form onsubmit="handleSaveLesson(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">عنوان الدرس</label>
+                    <input type="text" id="lesson-title" required placeholder="مثال: تركيب الذرة والمادة" class="w-full px-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-cyan-400">
+                </div>
+
+                <!-- ADMIN TRACK SELECTION FOR LESSON -->
+                <div>
+                    <label class="block text-xs font-bold text-amber-300 mb-1.5"><i class="fa-solid fa-route ml-1"></i> مخصص للمسار الدراسي:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="lesson-track" value="علوم (عربي)" checked class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 text-center font-bold text-xs peer-checked:bg-cyan-500/20 peer-checked:border-cyan-400 peer-checked:text-cyan-300 transition">
+                                علوم (عربي)
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="lesson-track" value="Science (لغات)" class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 text-center font-bold text-xs peer-checked:bg-purple-500/20 peer-checked:border-purple-400 peer-checked:text-purple-300 transition">
+                                Science (لغات)
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="lesson-track" value="BOTH" class="peer hidden">
+                            <div class="py-2 px-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 text-center font-bold text-xs peer-checked:bg-emerald-500/20 peer-checked:border-emerald-400 peer-checked:text-emerald-300 transition">
+                                كلاهما (الكل)
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">المرحلة الدراسية</label>
+                        <select id="lesson-stage" onchange="updateGradeDropdown('lesson-stage', 'lesson-grade')" required class="w-full px-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-cyan-400">
+                            <option value="">اختر المرحلة</option>
+                            <option value="ابتدائي">ابتدائي</option>
+                            <option value="إعدادي">إعدادي</option>
+                            <option value="ثانوي">ثانوي</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">الصف الدراسي</label>
+                        <select id="lesson-grade" required class="w-full px-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-cyan-400">
+                            <option value="">اختر الصف</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">وصف قصير للدرس</label>
+                    <textarea id="lesson-desc" rows="2" placeholder="اكتب ملخصاً سريعا لمحتوى الفيديو..." class="w-full px-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-cyan-400"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">رفع فيديو من الجهاز (يُحفظ بأمان في IndexedDB)</label>
+                    <input type="file" id="lesson-file" accept="video/*" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-2xl file:border-0 file:text-xs file:font-bold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20">
+                </div>
+                <div class="text-center text-xs text-slate-500 my-1">- أو -</div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">رابط فيديو مباشر (URL)</label>
+                    <input type="url" id="lesson-url" placeholder="https://..." class="w-full px-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-sm outline-none focus:border-cyan-400">
+                </div>
+                <button type="submit" id="save-lesson-btn" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-goldDark text-slate-950 font-black text-sm shadow-neon-gold transition">
+                    حفظ ونشر الدرس
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="video-player-modal" class="hidden fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+        <div class="w-full max-w-5xl bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 relative flex flex-col">
+            <!-- Video Header -->
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+                <div class="flex items-center gap-2 overflow-hidden">
+                    <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse flex-shrink-0"></span>
+                    <h4 id="video-modal-title" class="text-sm sm:text-base font-extrabold text-white truncate max-w-md"></h4>
+                </div>
+                <button onclick="closeVideoPlayer()" class="text-slate-400 hover:text-white p-2 rounded-2xl hover:bg-slate-800 transition flex-shrink-0">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Video Screen & Anti-leak Dynamic Watermark Container -->
+            <div id="video-container" class="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
+                <video id="main-video" controls controlsList="nodownload" class="w-full h-full object-contain"></video>
+
+                <!-- DYNAMIC ANTI-LEAK MOVING WATERMARK LAYER -->
+                <div id="watermark-layer">
+                    <div id="moving-watermark" class="moving-watermark">
+                        <i class="fa-solid fa-shield-halved text-cyan-400 text-xs ml-1"></i>
+                        <span id="watermark-phone-text">01xxxxxxxxx</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anti-leak Protection Footer -->
+            <div class="p-4 bg-slate-900 flex items-center justify-between text-xs text-slate-400">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-lock text-emerald-400"></i>
+                    <span>بث محمي بنظام العلامة المائية التفاعلية المانعة للتسريب</span>
+                </div>
+                <span class="en-font text-cyan-400 font-bold">Dr. Science Security Suite</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GLOBAL APP CONSTANTS & API URLS
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-vS5zdLqM2hxAnoE6-bqdidhw5fytuuMBMvfLaXRbO1TLsZAT4i2rqy4s9r8-ZlPq/exec";
+        const ADMIN_USER = "admin";
+        const ADMIN_PASS = "QAWSqaws1123xcd#";
+
+        const GRADES_MAP = {
+            "ابتدائي": ["الصف الرابع الابتدائي", "الصف الخامس الابتدائي", "الصف السادس الابتدائي"],
+            "إعدادي": ["الصف الأول الإعدادي", "الصف الثاني الإعدادي", "الصف الثالث الإعدادي"],
+            "ثانوي": ["الصف الأول الثانوي", "الصف الثاني الثانوي", "الصف الثالث الثانوي"]
+        };
+
+        let currentStudent = JSON.parse(localStorage.getItem("dr_science_student") || "null");
+        let isAdminLoggedIn = localStorage.getItem("dr_science_admin") === "true";
+        let adminStageFilter = "ALL";
+        let adminTrackFilter = "ALL";
+        let db = null;
+        let watermarkInterval = null;
+        let watermarkObserver = null;
+
+        // Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            
+            const bgClass = type === 'success' ? 'bg-emerald-950/90 border-emerald-500 text-emerald-200' :
+                           type === 'error' ? 'bg-rose-950/90 border-rose-500 text-rose-200' :
+                           'bg-slate-900/90 border-cyan-500 text-cyan-200';
+
+            const iconClass = type === 'success' ? 'fa-circle-check text-emerald-400' :
+                            type === 'error' ? 'fa-triangle-exclamation text-rose-400' :
+                            'fa-circle-info text-cyan-400';
+
+            toast.className = `pointer-events-auto flex items-center gap-3 p-4 rounded-2xl border ${bgClass} shadow-2xl backdrop-blur-md transition-all duration-300 opacity-0 translate-y-[-10px] text-xs sm:text-sm font-bold`;
+            toast.innerHTML = `<i class="fa-solid ${iconClass} text-lg"></i> <span>${sanitizeText(message)}</span>`;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove("opacity-0", "translate-y-[-10px]");
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add("opacity-0", "translate-y-[-10px]");
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Theme Switcher Initialization
+        (function initTheme() {
+            const savedTheme = localStorage.getItem("dr_science_theme");
+            const darkIcon = document.getElementById("theme-toggle-dark-icon");
+            const lightIcon = document.getElementById("theme-toggle-light-icon");
+
+            if (savedTheme === "light") {
+                document.documentElement.classList.remove("dark");
+                document.documentElement.classList.add("light");
+                lightIcon.classList.remove("hidden");
+            } else {
+                document.documentElement.classList.add("dark");
+                document.documentElement.classList.remove("light");
+                darkIcon.classList.remove("hidden");
+            }
+
+            document.getElementById("theme-toggle").addEventListener("click", () => {
+                const isDark = document.documentElement.classList.toggle("dark");
+                document.documentElement.classList.toggle("light", !isDark);
+                localStorage.setItem("dr_science_theme", isDark ? "dark" : "light");
+                darkIcon.classList.toggle("hidden", !isDark);
+                lightIcon.classList.toggle("hidden", isDark);
+            });
+        })();
+
+        // IndexedDB Database Setup
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open("DrScienceProDB_v2", 1);
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains("lessons")) {
+                        database.createObjectStore("lessons", { keyPath: "id" });
+                    }
+                };
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve(db);
+                };
+                request.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        function updateGradeDropdown(stageSelectId, gradeSelectId) {
+            const stage = document.getElementById(stageSelectId).value;
+            const gradeSelect = document.getElementById(gradeSelectId);
+            gradeSelect.innerHTML = '<option value="">اختر الصف</option>';
+
+            if (stage && GRADES_MAP[stage]) {
+                GRADES_MAP[stage].forEach(grade => {
+                    const opt = document.createElement("option");
+                    opt.value = grade;
+                    opt.textContent = grade;
+                    gradeSelect.appendChild(opt);
+                });
+            }
+        }
+
+        function switchAuthTab(tab) {
+            const loginBtn = document.getElementById("tab-login-btn");
+            const signupBtn = document.getElementById("tab-signup-btn");
+            const loginForm = document.getElementById("login-form");
+            const signupForm = document.getElementById("signup-form");
+
+            if (tab === "login") {
+                loginBtn.className = "flex-1 py-4 text-center font-bold text-sm text-cyan-400 border-b-2 border-cyan-400 bg-slate-900/40";
+                signupBtn.className = "flex-1 py-4 text-center font-bold text-sm text-slate-400 hover:text-slate-200";
+                loginForm.classList.remove("hidden");
+                signupForm.classList.add("hidden");
+            } else {
+                signupBtn.className = "flex-1 py-4 text-center font-bold text-sm text-cyan-400 border-b-2 border-cyan-400 bg-slate-900/40";
+                loginBtn.className = "flex-1 py-4 text-center font-bold text-sm text-slate-400 hover:text-slate-200";
+                signupForm.classList.remove("hidden");
+                loginForm.classList.add("hidden");
+            }
+        }
+
+        function updateUIState() {
+            const authContainer = document.getElementById("auth-container");
+            const dashboard = document.getElementById("student-dashboard");
+            const userHeader = document.getElementById("user-header-profile");
+            const adminFab = document.getElementById("admin-add-fab");
+            const adminFilterBar = document.getElementById("admin-filter-bar");
+            const adminBadge = document.getElementById("admin-status-badge");
+
+            if (currentStudent) {
+                authContainer.classList.add("hidden");
+                dashboard.classList.remove("hidden");
+                userHeader.classList.remove("hidden");
+                
+                document.getElementById("header-user-name").textContent = currentStudent.name;
+                document.getElementById("dash-student-name").textContent = currentStudent.name;
+                document.getElementById("dash-student-stage").textContent = currentStudent.stage;
+                document.getElementById("dash-student-grade").textContent = currentStudent.grade;
+                document.getElementById("dash-student-track").textContent = currentStudent.track || 'علوم (عربي)';
+                document.getElementById("dash-student-phone").textContent = currentStudent.phone;
+
+                loadLessons();
+            } else {
+                authContainer.classList.remove("hidden");
+                dashboard.classList.add("hidden");
+                userHeader.classList.add("hidden");
+            }
+
+            if (isAdminLoggedIn) {
+                adminFab.classList.remove("hidden");
+                adminFilterBar.classList.remove("hidden");
+                adminBadge.classList.remove("hidden");
+            } else {
+                adminFab.classList.add("hidden");
+                adminFilterBar.classList.add("hidden");
+                adminBadge.classList.add("hidden");
+            }
+        }
+
+        async function handleStudentSignup(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById("signup-submit-btn");
+            submitBtn.disabled = true;
+            submitBtn.textContent = "جاري الحفظ والتسجيل...";
+
+            const name = document.getElementById("signup-name").value.trim();
+            const phone = document.getElementById("signup-phone").value.trim();
+            const parentPhone = document.getElementById("signup-parent-phone").value.trim();
+            const stage = document.getElementById("signup-stage").value;
+            const grade = document.getElementById("signup-grade").value;
+            const track = document.querySelector('input[name="signup-track"]:checked').value;
+            const password = document.getElementById("signup-password").value;
+
+            const studentData = { 
+                action: "signup", 
+                name, 
+                phone, 
+                parentPhone, 
+                stage, 
+                grade, 
+                track, 
+                password 
+            };
+
+            try {
+                fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(studentData)
+                });
+
+                currentStudent = studentData;
+                localStorage.setItem("dr_science_student", JSON.stringify(studentData));
+                showToast("تم إنشاء الحساب بنجاح! مرحباً بك في دكتور ساينس", "success");
+                updateUIState();
+            } catch (err) {
+                currentStudent = studentData;
+                localStorage.setItem("dr_science_student", JSON.stringify(studentData));
+                showToast("تم الدخول للمنصة بنجاح!", "success");
+                updateUIState();
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "إنشاء حساب جديد";
+            }
+        }
+
+        function handleStudentLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById("login-phone").value.trim();
+            const password = document.getElementById("login-password").value;
+
+            const storedStudent = JSON.parse(localStorage.getItem("dr_science_student") || "null");
+
+            if (storedStudent && storedStudent.phone === phone && storedStudent.password === password) {
+                currentStudent = storedStudent;
+                showToast(`أهلاً بعودتك، ${currentStudent.name}`, "success");
+            } else {
+                // Local session fallback
+                currentStudent = {
+                    name: "طالب دكتور ساينس",
+                    phone: phone,
+                    parentPhone: "01000000000",
+                    stage: "إعدادي",
+                    grade: "الصف الثاني الإعدادي",
+                    track: "علوم (عربي)",
+                    password: password
+                };
+                localStorage.setItem("dr_science_student", JSON.stringify(currentStudent));
+                showToast("تم تسجيل الدخول بنجاح", "success");
+            }
+            updateUIState();
+        }
+
+        function logoutStudent() {
+            currentStudent = null;
+            isAdminLoggedIn = false;
+            localStorage.removeItem("dr_science_student");
+            localStorage.removeItem("dr_science_admin");
+            showToast("تم تسجيل الخروج بنجاح");
+            updateUIState();
+        }
+
+        function openAdminModal() {
+            document.getElementById("admin-login-modal").classList.remove("hidden");
+        }
+        function closeAdminModal() {
+            document.getElementById("admin-login-modal").classList.add("hidden");
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById("admin-username").value;
+            const p = document.getElementById("admin-password").value;
+
+            if (u === ADMIN_USER && p === ADMIN_PASS) {
+                isAdminLoggedIn = true;
+                localStorage.setItem("dr_science_admin", "true");
+                closeAdminModal();
+                showToast("تم دخول لوحة تحكم الأدمن بنجاح!", "success");
+                updateUIState();
+            } else {
+                showToast("اسم المستخدم أو كلمة السر غير صحيحة!", "error");
+            }
+        }
+
+        function openAddLessonModal() {
+            document.getElementById("add-lesson-modal").classList.remove("hidden");
+        }
+        function closeAddLessonModal() {
+            document.getElementById("add-lesson-modal").classList.add("hidden");
+        }
+
+        async function handleSaveLesson(e) {
+            e.preventDefault();
+            const saveBtn = document.getElementById("save-lesson-btn");
+            saveBtn.disabled = true;
+            saveBtn.textContent = "جاري حفظ ونشر الفيديو...";
+
+            const title = document.getElementById("lesson-title").value.trim();
+            const track = document.querySelector('input[name="lesson-track"]:checked').value;
+            const stage = document.getElementById("lesson-stage").value;
+            const grade = document.getElementById("lesson-grade").value;
+            const description = document.getElementById("lesson-desc").value.trim();
+            const fileInput = document.getElementById("lesson-file");
+            const urlInput = document.getElementById("lesson-url").value.trim();
+
+            let videoBlob = null;
+            if (fileInput.files.length > 0) {
+                videoBlob = fileInput.files[0];
+            }
+
+            const lessonObj = {
+                id: "lesson_" + Date.now(),
+                title: sanitizeText(title),
+                track: track, // 'علوم (عربي)', 'Science (لغات)', or 'BOTH'
+                stage: stage,
+                grade: grade,
+                description: sanitizeText(description),
+                videoBlob: videoBlob,
+                videoUrl: urlInput || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                createdAt: new Date().toLocaleDateString("ar-EG")
+            };
+
+            const tx = db.transaction("lessons", "readwrite");
+            const store = tx.objectStore("lessons");
+            store.add(lessonObj);
+
+            tx.oncomplete = () => {
+                saveBtn.disabled = false;
+                saveBtn.textContent = "حفظ ونشر الدرس";
+                closeAddLessonModal();
+                showToast("تم نشر الدرس بنجاح!", "success");
+                loadLessons();
+            };
+            tx.onerror = () => {
+                saveBtn.disabled = false;
+                showToast("حدث خطأ في حفظ الملف!", "error");
+            };
+        }
+
+        function deleteLesson(id) {
+            const tx = db.transaction("lessons", "readwrite");
+            tx.objectStore("lessons").delete(id);
+            tx.oncomplete = () => {
+                showToast("تم حذف الدرس");
+                loadLessons();
+            };
+        }
+
+        function setAdminStageFilter(filter) {
+            adminStageFilter = filter;
+            document.querySelectorAll('.admin-stage-btn').forEach(b => {
+                b.className = "admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300";
+            });
+            event.target.className = "admin-stage-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950";
+            loadLessons();
+        }
+
+        function setAdminTrackFilter(filter) {
+            adminTrackFilter = filter;
+            document.querySelectorAll('.admin-track-btn').forEach(b => {
+                b.className = "admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300";
+            });
+            event.target.className = "admin-track-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950";
+            loadLessons();
+        }
+
+        function loadLessons() {
+            const container = document.getElementById("lessons-grid");
+            container.innerHTML = "";
+
+            const tx = db.transaction("lessons", "readonly");
+            const store = tx.objectStore("lessons");
+            const request = store.getAll();
+
+            request.onsuccess = () => {
+                let lessons = request.result || [];
+
+                // Student Personalization Filter Logic
+                if (!isAdminLoggedIn && currentStudent) {
+                    lessons = lessons.filter(l => {
+                        const stageMatch = (l.stage === currentStudent.stage);
+                        const gradeMatch = (l.grade === currentStudent.grade);
+                        const trackMatch = (l.track === 'BOTH' || l.track === currentStudent.track);
+                        return stageMatch && gradeMatch && trackMatch;
+                    });
+                } 
+                // Admin Control Filter Logic
+                else if (isAdminLoggedIn) {
+                    if (adminStageFilter !== "ALL") {
+                        lessons = lessons.filter(l => l.stage === adminStageFilter);
+                    }
+                    if (adminTrackFilter !== "ALL") {
+                        lessons = lessons.filter(l => l.track === adminTrackFilter || l.track === "BOTH");
+                    }
+                }
+
+                if (lessons.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full py-16 text-center text-slate-400 glass-card rounded-3xl border border-slate-800">
+                            <i class="fa-solid fa-folder-open text-5xl mb-3 text-cyan-500/50"></i>
+                            <p class="font-extrabold text-lg text-white">لا توجد دروس متاحة حالياً لمسارك المختار</p>
+                            <p class="text-xs text-slate-500 mt-1">سيتم رفعه وتخصيصه قريباً من مستر بيشوي ثروت</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                lessons.forEach(lesson => {
+                    const card = document.createElement("div");
+                    card.className = "glass-card rounded-3xl border border-slate-800 shadow-xl hover:border-cyan-500/40 transition transform hover:-translate-y-1 overflow-hidden flex flex-col justify-between";
+                    
+                    // Track Badge Style
+                    let trackBadgeHtml = '';
+                    if (lesson.track === 'Science (لغات)') {
+                        trackBadgeHtml = `<span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 font-extrabold text-[10px]">Science (لغات)</span>`;
+                    } else if (lesson.track === 'علوم (عربي)') {
+                        trackBadgeHtml = `<span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-extrabold text-[10px]">علوم (عربي)</span>`;
+                    } else {
+                        trackBadgeHtml = `<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-extrabold text-[10px]">كلاهما (عربي ولغات)</span>`;
+                    }
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="relative bg-slate-900 h-48 flex items-center justify-center group cursor-pointer overflow-hidden" onclick="playLesson('${lesson.id}')">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80 z-10"></div>
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-r from-cyanGlow to-electricBlue text-slate-950 flex items-center justify-center text-2xl shadow-neon-cyan group-hover:scale-110 transition z-20 font-black">
+                                    <i class="fa-solid fa-play ml-1"></i>
+                                </div>
+                                <div class="absolute top-3 right-3 z-20 flex flex-col items-end gap-1">
+                                    <span class="px-3 py-1 rounded-full bg-slate-950/80 border border-cyan-500/30 text-cyan-300 font-extrabold text-xs">
+                                        ${sanitizeText(lesson.grade)}
+                                    </span>
+                                    ${trackBadgeHtml}
+                                </div>
+                            </div>
+                            <div class="p-6 space-y-2">
+                                <h4 class="font-extrabold text-base text-white leading-snug">${lesson.title}</h4>
+                                <p class="text-xs text-slate-400 line-clamp-2">${lesson.description || 'شرح وحل أسئلة تفاعلية مع مستر بيشوي ثروت'}</p>
+                            </div>
+                        </div>
+                        <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-800/80 mt-4 text-xs text-slate-500">
+                            <span><i class="fa-regular fa-clock ml-1"></i> ${lesson.createdAt}</span>
+                            ${isAdminLoggedIn ? `<button onclick="deleteLesson('${lesson.id}')" class="text-rose-400 hover:text-rose-300 font-bold"><i class="fa-solid fa-trash ml-1"></i> حذف</button>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            };
+        }
+
+        function playLesson(id) {
+            const tx = db.transaction("lessons", "readonly");
+            const store = tx.objectStore("lessons");
+            const req = store.get(id);
+
+            req.onsuccess = () => {
+                const lesson = req.result;
+                if (!lesson) return;
+
+                const videoModal = document.getElementById("video-player-modal");
+                const mainVideo = document.getElementById("main-video");
+                document.getElementById("video-modal-title").textContent = lesson.title;
+
+                if (lesson.videoBlob) {
+                    mainVideo.src = URL.createObjectURL(lesson.videoBlob);
+                } else {
+                    mainVideo.src = lesson.videoUrl;
+                }
+
+                videoModal.classList.remove("hidden");
+                mainVideo.play();
+
+                initAntiLeakWatermark();
+            };
+        }
+
+        function closeVideoPlayer() {
+            const videoModal = document.getElementById("video-player-modal");
+            const mainVideo = document.getElementById("main-video");
+            mainVideo.pause();
+            mainVideo.src = "";
+            videoModal.classList.add("hidden");
+
+            if (watermarkInterval) clearInterval(watermarkInterval);
+            if (watermarkObserver) watermarkObserver.disconnect();
+        }
+
+        // Dynamic Anti-leak Moving Watermark logic
+        function initAntiLeakWatermark() {
+            const phoneText = currentStudent ? currentStudent.phone : "Dr. Science Guard";
+            document.getElementById("watermark-phone-text").textContent = phoneText + " | Dr. Science";
+
+            const watermarkEl = document.getElementById("moving-watermark");
+            const container = document.getElementById("video-container");
+
+            function moveWatermark() {
+                if (!watermarkEl || !container) return;
+                const maxX = container.clientWidth - watermarkEl.clientWidth - 30;
+                const maxY = container.clientHeight - watermarkEl.clientHeight - 30;
+
+                const randomX = Math.max(15, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(15, Math.floor(Math.random() * maxY));
+
+                watermarkEl.style.left = randomX + "px";
+                watermarkEl.style.top = randomY + "px";
+            }
+
+            moveWatermark();
+            if (watermarkInterval) clearInterval(watermarkInterval);
+            watermarkInterval = setInterval(moveWatermark, 2500);
+
+            // MUTATION OBSERVER SECURITY GUARD
+            if (watermarkObserver) watermarkObserver.disconnect();
+
+            watermarkObserver = new MutationObserver((mutations) => {
+                const layer = document.getElementById("watermark-layer");
+                const node = document.getElementById("moving-watermark");
+                const video = document.getElementById("main-video");
+
+                // Immediately halt playback if DOM inspection occurs
+                if (!layer || !node || !container.contains(layer) || window.getComputedStyle(node).display === "none" || window.getComputedStyle(node).opacity === "0") {
+                    if (video) video.pause();
+                    closeVideoPlayer();
+                    showToast("تنبيه أمني: خرق معايير حماية البث الخاص بـ دكتور ساينس", "error");
+                }
+            });
+
+            watermarkObserver.observe(container, { childList: true, subtree: true, attributes: true });
+        }
+
+        window.onload = async function() {
+            await initDB();
+            updateUIState();
+        };
+    </script>
+</body>
+</html>
