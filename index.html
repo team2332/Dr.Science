@@ -120,7 +120,7 @@
 
             <!-- قائمة الفيديوهات -->
             <div class="space-y-3 max-h-72 overflow-y-auto pr-1" id="videosList">
-                <p class="text-slate-400 text-center text-xs py-6">جاري التحميل من جرس الشيت...</p>
+                <p class="text-slate-400 text-center text-xs py-6">جاري التحميل من الشيت...</p>
             </div>
 
             <button onclick="logout()" class="w-full bg-slate-200/80 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2.5 rounded-2xl transition duration-200 cursor-pointer text-xs">تسجيل الخروج</button>
@@ -296,7 +296,7 @@
             }
 
             const btn = document.getElementById('regBtn');
-            btn.innerText = "جاري إنشاء الحساب...";
+            btn.innerText = "جاري إنشاء الحساب وإرساله للشيت...";
             btn.disabled = true;
 
             try {
@@ -309,25 +309,22 @@
                 });
                 let result = await response.json();
                 
-                if(result.status === 'success' || true) {
+                if(result.status === 'success') {
                     localStorage.setItem('user_session', JSON.stringify({role: 'student', name, stage, grade}));
                     alert("تم إنشاء الحساب بنجاح وتخزينه في جوجل شيت!");
                     activateStudentView(name, stage, grade);
                 } else {
-                    alert("حدث خطأ أثناء التسجيل: " + (result.message || ''));
+                    alert("خطأ من الشيت: " + (result.message || 'تعذر التسجيل'));
                 }
             } catch (err) {
-                // تجاوز عوائق الـ CORS لو حصلت في الجت، ونفتح الحساب محلياً ونسجل
-                localStorage.setItem('user_session', JSON.stringify({role: 'student', name, stage, grade}));
-                alert("تم إنشاء الحساب بنجاح!");
-                activateStudentView(name, stage, grade);
+                alert("حدث خطأ أثناء الاتصال بالجوجل شيت.");
             } finally {
                 btn.innerText = "إنشاء الحساب الآن";
                 btn.disabled = false;
             }
         }
 
-        // تسجيل الدخول والتحقق من جوجل شيت
+        // تسجيل الدخول الحقيقي والصارم من جوجل شيت
         async function handleLogin() {
             const phone = document.getElementById('loginPhone').value;
             const pass = document.getElementById('loginPassword').value;
@@ -338,7 +335,7 @@
             }
 
             const btn = document.getElementById('loginBtn');
-            btn.innerText = "جاري التحقق...";
+            btn.innerText = "جاري التحقق من الشيت...";
             btn.disabled = true;
 
             try {
@@ -354,16 +351,10 @@
                     }));
                     activateStudentView(result.name, result.stage, result.grade);
                 } else {
-                    // لو الحساب مش موجود في الشيت للتجربة السريعة أو خطأ
-                    alert(result.message || "بيانات الدخول غير صحيحة أو الطالب غير مسجل!");
+                    alert(result.message || "رقم الطالب أو كلمة المرور غير صحيحة!");
                 }
             } catch (err) {
-                // افتراضي للطالب لو حصلت مشكلة شبكة
-                let dummyName = "طالب مجتهد";
-                let dummyStage = "ثانوي";
-                let dummyGrade = "الصف الأول الثانوي";
-                localStorage.setItem('user_session', JSON.stringify({role: 'student', name: dummyName, stage: dummyStage, grade: dummyGrade}));
-                activateStudentView(dummyName, dummyStage, dummyGrade);
+                alert("تعذر الاتصال بقاعدة البيانات، تأكد من الإنترنت أو من صحة رابط الـ Script.");
             } finally {
                 btn.innerText = "تسجيل الدخول";
                 btn.disabled = false;
@@ -407,15 +398,9 @@
                 });
                 closeAddModal();
                 alert("تم نشر المحتوى بنجاح في جوجل شيت!");
-                reloadCurrentVideosView();
+                fetchVideosFromSheet('admin', '', '');
             } catch (err) {
-                // تخزين محلي احتياطي لو الشبكة قاطعة
-                let videos = JSON.parse(localStorage.getItem('mr_videos') || '[]');
-                videos.push({ title, youtube: youtubeEmbed, desc, stage, grade });
-                localStorage.setItem('mr_videos', JSON.stringify(videos));
-                closeAddModal();
-                alert("تم الحفظ المحلي بنجاح!");
-                reloadCurrentVideosView();
+                alert("تعذر حفظ المحتوى في الشيت.");
             } finally {
                 btn.innerText = "نشر المحتوى للجوجل شيت";
                 btn.disabled = false;
@@ -431,17 +416,6 @@
             return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : url;
         }
 
-        function reloadCurrentVideosView() {
-            let session = JSON.parse(localStorage.getItem('user_session'));
-            if(session) {
-                if(session.role === 'admin') {
-                    fetchVideosFromSheet('admin', '', '');
-                } else {
-                    fetchVideosFromSheet('student', session.stage, session.grade);
-                }
-            }
-        }
-
         // جلب الفيديوهات من Google Sheet
         async function fetchVideosFromSheet(role, stage, grade) {
             const listContainer = document.getElementById('videosList');
@@ -451,9 +425,7 @@
                 let response = await fetch(`${SCRIPT_URL}?action=getVideos`);
                 let videos = await response.json();
                 
-                // دمج مع المحلي احتياطياً
-                let localVideos = JSON.parse(localStorage.getItem('mr_videos') || '[]');
-                let allVideos = [...localVideos, ...(Array.isArray(videos) ? videos : [])];
+                let allVideos = Array.isArray(videos) ? videos : [];
 
                 if(role === 'student') {
                     allVideos = allVideos.filter(v => v.stage === stage && v.grade === grade);
@@ -478,28 +450,7 @@
                     `;
                 });
             } catch (err) {
-                // لو حصلت مشكلة في الـ Fetch، نعرض التخزين المحلي
-                let localVideos = JSON.parse(localStorage.getItem('mr_videos') || '[]');
-                if(role === 'student') {
-                    localVideos = localVideos.filter(v => v.stage === stage && v.grade === grade);
-                }
-                if(localVideos.length === 0) {
-                    listContainer.innerHTML = `<p class="text-slate-400 text-center text-xs py-6">تعذر الاتصال بقاعدة البيانات حالياً.</p>`;
-                    return;
-                }
-                listContainer.innerHTML = "";
-                localVideos.forEach(v => {
-                    listContainer.innerHTML += `
-                        <div class="bg-white/70 dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2 text-right">
-                            <div class="flex justify-between items-start">
-                                <h4 class="font-bold text-sm text-blue-600 dark:text-blue-400">${v.title}</h4>
-                                <span class="text-[10px] bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-300 px-2.5 py-1 rounded-xl font-extrabold">${v.stage} - ${v.grade}</span>
-                            </div>
-                            <p class="text-xs text-slate-500 dark:text-slate-300">${v.desc}</p>
-                            ${v.youtube ? `<div class="aspect-video w-full"><iframe src="${v.youtube}" class="w-full h-full rounded-xl shadow" allowfullscreen></iframe></div>` : ''}
-                        </div>
-                    `;
-                });
+                listContainer.innerHTML = `<p class="text-slate-400 text-center text-xs py-6">تعذر جلب الحصص من الشيت حالياً.</p>`;
             }
         }
     </script>
