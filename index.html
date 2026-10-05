@@ -274,6 +274,10 @@
                     <label class="block text-xs font-semibold text-slate-300 mb-1">رقم هاتف الطالب</label>
                     <input type="tel" id="loginPhone" required placeholder="01xxxxxxxxx" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
                 </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">كلمة السر</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
+                </div>
                 <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm transition-all shadow-lg shadow-amber-500/20">
                     دخول إلى المنصة
                 </button>
@@ -294,6 +298,10 @@
                         <label class="block text-xs font-semibold text-slate-300 mb-1">رقم ولي الأمر</label>
                         <input type="tel" id="regParentPhone" required placeholder="01xxxxxxxxx" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-3 text-xs text-white focus:outline-none focus:border-amber-500">
                     </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">كلمة السر</label>
+                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -462,7 +470,7 @@
 
     <script>
         // Google Apps Script API Endpoint Configuration
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOhGjv1q0LJJbnbOeBMPUUjPxYPogBj_2Xy9l9Qg2-3tQbptCr_WihgxtjphXTaPK3/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzsmpzRc1ITw5SRmob-vw9GQoxK0kvs_XnvWiDp2gQFYd8tLXqqgglTRL-2T9K_bq4_/exec';
 
         // Application State
         let currentUser = null;
@@ -486,7 +494,6 @@
             if (input === null || input === undefined) return '';
             let str = String(input).trim();
             if (str === 'undefined' || str === 'null') return '';
-            // Strip single quotes, quotes, curly quotes, backticks
             return str.replace(/['"’‘`]/g, '').trim();
         }
 
@@ -498,7 +505,6 @@
             if (phone === null || phone === undefined) return '';
             let str = String(phone).trim();
             if (str === 'undefined' || str === 'null') return '';
-            // Remove quotes first, then filter digits
             let cleaned = str.replace(/['"’‘`]/g, '').replace(/[^0-9+]/g, '').trim();
             return cleaned;
         }
@@ -510,9 +516,7 @@
                     const parsed = JSON.parse(rawStored);
                     const cleanName = cleanText(parsed.name);
                     const cleanPhone = cleanPhoneString(parsed.phone);
-                    const cleanParentPhone = cleanPhoneString(parsed.parentPhone);
 
-                    // Radical cleanup: Purge broken session if data missing or literal undefined
                     if (!cleanName || !cleanPhone || cleanName === 'undefined' || cleanPhone === 'undefined') {
                         console.warn("Purging corrupted user session from storage...");
                         localStorage.removeItem('dr_science_user');
@@ -521,13 +525,13 @@
                         currentUser = {
                             name: cleanName,
                             phone: cleanPhone,
-                            parentPhone: cleanParentPhone,
+                            parentPhone: cleanPhoneString(parsed.parentPhone),
+                            password: parsed.password || '',
                             track: parsed.track || 'علوم (عربي)',
                             stage: parsed.stage || 'المرحلة الإعدادية',
                             grade: parsed.grade || 'الصف الأول الإعدادي',
                             role: parsed.role || 'student'
                         };
-                        // Write back pure cleaned object
                         localStorage.setItem('dr_science_user', JSON.stringify(currentUser));
                     }
                 } catch (e) {
@@ -673,19 +677,7 @@
             if (cached) {
                 try { lessonsList = JSON.parse(cached); } catch (e) { lessonsList = []; }
             } else {
-                lessonsList = [
-                    {
-                        id: "1",
-                        title: "الدرس الأول: المادة وخواصها والتفاعلات الكيميائية",
-                        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                        track: "علوم (عربي)",
-                        stage: "المرحلة الإعدادية",
-                        grade: "الصف الأول الإعدادي",
-                        description: "شرح مبسط لخواص المادة والتفاعلات مع مستر بيشوي ثروت.",
-                        homework: "",
-                        notes: ""
-                    }
-                ];
+                lessonsList = [];
             }
         }
 
@@ -756,7 +748,6 @@
             const wmPhone = document.getElementById('wmPhone');
             const wmName = document.getElementById('wmName');
 
-            // Pure sanitized values
             const safePhone = cleanPhoneString(currentUser.phone) || '01xxxxxxxx';
             const safeName = cleanText(currentUser.name) || 'طالب';
 
@@ -854,40 +845,41 @@
         async function handleLogin(e) {
             e.preventDefault();
             const phoneInput = document.getElementById('loginPhone').value;
+            const passwordInput = document.getElementById('loginPassword').value;
             const cleanPhone = cleanPhoneString(phoneInput);
 
-            if (!cleanPhone) {
-                showToast('يرجى إدخال رقم هاتف صحيح', 'error');
+            if (!cleanPhone || !passwordInput) {
+                showToast('يرجى إدخال رقم الهاتف وكلمة السر', 'error');
                 return;
             }
 
-            // Set default object with sanitized input immediately
             currentUser = {
                 name: 'طالب',
                 phone: cleanPhone,
+                password: passwordInput,
                 track: currentTrack,
                 stage: currentStage,
                 grade: currentGrade,
                 role: 'student'
             };
 
-            // Backend lookup
             try {
-                const res = await fetch(`${APPS_SCRIPT_URL}?action=login&phone=${encodeURIComponent(cleanPhone)}`);
+                const res = await fetch(`${APPS_SCRIPT_URL}?action=login&phone=${encodeURIComponent(cleanPhone)}&password=${encodeURIComponent(passwordInput)}`);
                 const data = await res.json();
                 if (data && data.status === 'success') {
-                    // Surgical cleaning of returned name and phone from Google Sheets
                     if (data.name) currentUser.name = cleanText(data.name);
                     if (data.phone) currentUser.phone = cleanPhoneString(data.phone);
                     if (data.track) currentUser.track = data.track;
                     if (data.stage) currentUser.stage = data.stage;
                     if (data.grade) currentUser.grade = data.grade;
+                } else if (data && data.status === 'error') {
+                    showToast(data.message || 'بيانات الدخول غير صحيحة', 'error');
+                    return;
                 }
             } catch (err) {
                 console.warn("Backend check bypassed, using local verified session", err);
             }
 
-            // Final guarantee cleaning
             currentUser.name = cleanText(currentUser.name) || 'طالب منصة Dr. Science';
             currentUser.phone = cleanPhoneString(currentUser.phone) || cleanPhone;
             
@@ -904,35 +896,33 @@
             const rawName = document.getElementById('regName').value;
             const rawPhone = document.getElementById('regPhone').value;
             const rawParentPhone = document.getElementById('regParentPhone').value;
+            const rawPassword = document.getElementById('regPassword').value;
             const track = document.getElementById('regTrack').value;
             const stage = document.getElementById('regStage').value;
             const grade = document.getElementById('regGrade').value;
 
-            // Direct surgical cleaning from inputs
             const cleanName = cleanText(rawName);
             const cleanPhone = cleanPhoneString(rawPhone);
             const cleanParent = cleanPhoneString(rawParentPhone);
 
-            if (!cleanName || !cleanPhone) {
-                showToast('يرجى إدخال اسم الطالب ورقم الهاتف بشكل صحيح', 'error');
+            if (!cleanName || !cleanPhone || !rawPassword) {
+                showToast('يرجى إدخال اسم الطالب ورقم الهاتف وكلمة السر بشكل صحيح', 'error');
                 return;
             }
 
-            // Immediately set active student profile directly from inputs to prevent undefined
             currentUser = {
                 name: cleanName,
                 phone: cleanPhone,
                 parentPhone: cleanParent,
+                password: rawPassword,
                 track: track,
                 stage: stage,
                 grade: grade,
                 role: 'student'
             };
 
-            // Save to localStorage immediately
             localStorage.setItem('dr_science_user', JSON.stringify(currentUser));
 
-            // Sync asynchronously with Google Sheet database
             try {
                 await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
@@ -943,6 +933,7 @@
                         name: cleanName,
                         phone: cleanPhone,
                         parentPhone: cleanParent,
+                        password: rawPassword,
                         track: track,
                         stage: stage,
                         grade: grade
@@ -1044,19 +1035,4 @@
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'deleteLesson', id: id })
-                });
-            } catch (e) {
-                console.warn("Delete request sync", e);
-            }
-
-            showToast('تم حذف الدرس بنجاح', 'info');
-            renderLessons();
-        }
-
-        window.onload = function() {
-            initSession();
-        };
-    </script>
-</body>
-</html>
+                    body: JSON.stringify({ action:
