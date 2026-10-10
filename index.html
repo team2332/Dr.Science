@@ -16,7 +16,6 @@
         .dark .glass-box {
             background: rgba(15, 23, 42, 0.85);
         }
-        /* حركة العلامة المائية الشفافة فوق الفيديو (الاسم ورقم الطالب) */
         @keyframes floatWatermark {
             0% { top: 10%; left: 10%; opacity: 0.15; }
             25% { top: 70%; left: 50%; opacity: 0.25; }
@@ -128,14 +127,28 @@
             </p>
         </div>
 
-        <!-- 3. الصفحة الرئيسية -->
+        <!-- 3. الصفحة الرئيسية + المحفظة الإلكترونية -->
         <div id="homeSection" class="space-y-4 hidden">
+            <!-- كارت المحفظة الإلكترونية للطالب -->
+            <div id="walletCard" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-3xl shadow-lg flex justify-between items-center">
+                <div>
+                    <span class="text-[10px] font-bold opacity-80 block">رصيد المحفظة الإلكترونية 👛</span>
+                    <span id="walletBalance" class="text-xl font-black">0.00 ج.م</span>
+                </div>
+                <button onclick="openChargeModal()" class="bg-white text-emerald-700 hover:bg-emerald-50 px-3 py-2 rounded-2xl text-xs font-black shadow transition cursor-pointer">
+                    شحن المحفظة 💳
+                </button>
+            </div>
+
             <div class="flex justify-between items-center bg-blue-50/80 dark:bg-slate-800/80 p-4 rounded-2xl border border-blue-100 dark:border-slate-700 shadow-inner">
                 <div>
                     <h2 class="text-xs font-black text-blue-700 dark:text-blue-300" id="welcomeUser">أهلاً بك</h2>
                     <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-0.5" id="userStageGrade">-</p>
                 </div>
-                <button id="addContentBtn" onclick="openAddModal()" class="hidden bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/30 transition cursor-pointer" title="إضافة محتوى">+</button>
+                <div class="flex items-center gap-2">
+                    <button id="reportBtn" onclick="openReportModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-2xl text-xs font-bold shadow transition cursor-pointer">تقارير المبيعات 📊</button>
+                    <button id="addContentBtn" onclick="openAddModal()" class="hidden bg-blue-600 hover:bg-blue-700 text-white w-9 h-9 rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/30 transition cursor-pointer" title="إضافة محتوى">+</button>
+                </div>
             </div>
 
             <div class="space-y-3 max-h-72 overflow-y-auto pr-1" id="videosList">
@@ -147,34 +160,58 @@
     </div>
 
     <!-- نافذة المسؤول -->
-    <!-- نافذة المسؤول -->
-<div id="adminModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center hidden p-4 z-50">
-    <div class="glass-box p-6 rounded-[2rem] w-full max-w-sm space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800">
-        <h3 class="text-base font-extrabold text-blue-600 dark:text-blue-400 text-center">بوابة المسؤول (Admin) ⚙️</h3>
-        <div class="space-y-1">
-            <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">اسم المستخدم</label>
-            <!-- أصبحت خانة اسم المستخدم فارغة -->
-            <input type="text" id="adminUser" class="w-full px-3.5 py-2.5 border rounded-2xl text-xs bg-white/50 dark:bg-slate-900/50 dark:border-slate-700 font-semibold" placeholder="أدخل اسم المستخدم">
-        </div>
-        <div class="space-y-1">
-            <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">كلمة المرور</label>
-            <!-- أصبحت خانة كلمة المرور فارغة تماماً -->
-            <input type="password" id="adminPass" class="w-full px-3.5 py-2.5 border rounded-2xl text-xs bg-white/50 dark:bg-slate-900/50 dark:border-slate-700 font-semibold" placeholder="••••••••">
-        </div>
-        <div class="flex space-x-2 space-x-reverse pt-2">
-            <button onclick="verifyAdmin()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-2xl text-xs font-bold transition cursor-pointer">دخول</button>
-            <button onclick="closeAdminModal()" class="flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 py-2.5 rounded-2xl text-xs font-bold transition cursor-pointer">إلغاء</button>
+    <div id="adminModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center hidden p-4 z-50">
+        <div class="glass-box p-6 rounded-[2rem] w-full max-w-sm space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800">
+            <h3 class="text-base font-extrabold text-blue-600 dark:text-blue-400 text-center">بوابة المسؤول (Admin) ⚙️</h3>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">اسم المستخدم</label>
+                <input type="text" id="adminUser" class="w-full px-3.5 py-2.5 border rounded-2xl text-xs bg-white/50 dark:bg-slate-900/50 dark:border-slate-700 font-semibold" placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">كلمة المرور</label>
+                <input type="password" id="adminPass" class="w-full px-3.5 py-2.5 border rounded-2xl text-xs bg-white/50 dark:bg-slate-900/50 dark:border-slate-700 font-semibold" placeholder="••••••••">
+            </div>
+            <div class="flex space-x-2 space-x-reverse pt-2">
+                <button onclick="verifyAdmin()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-2xl text-xs font-bold transition cursor-pointer">دخول</button>
+                <button onclick="closeAdminModal()" class="flex-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 py-2.5 rounded-2xl text-xs font-bold transition cursor-pointer">إلغاء</button>
+            </div>
         </div>
     </div>
-</div>
 
-    <!-- نافذة إضافة محتوى -->
+    <!-- نافذة شحن المحفظة (فودافون كاش) -->
+    <div id="chargeModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center hidden p-4 z-50">
+        <div class="glass-box p-6 rounded-[2rem] w-full max-w-sm space-y-4 shadow-2xl border border-slate-200 dark:border-slate-800 text-center">
+            <h3 class="text-base font-extrabold text-emerald-600 dark:text-emerald-400">شحن المحفظة الإلكترونية 💳</h3>
+            <p class="text-xs text-slate-500">اختر طريقة الشحن المناسبة لك:</p>
+            <button onclick="alert('قريباً...')" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer text-xs">
+                <span>فودافون كاش (Vodafone Cash)</span> 📱
+            </button>
+            <button onclick="closeChargeModal()" class="w-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 py-2 rounded-2xl text-xs font-bold transition cursor-pointer">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- نافذة تقارير المشاهدات والمبيعات للـ Admin -->
+    <div id="reportModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center hidden p-4 z-50">
+        <div class="glass-box p-6 rounded-[2rem] w-full max-w-md space-y-3 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[85vh] overflow-y-auto">
+            <h3 class="text-base font-extrabold text-emerald-600 dark:text-emerald-400 text-center">تقرير المشتركين والمبيعات 📊</h3>
+            <div id="reportContent" class="space-y-2 text-xs">
+                <p class="text-center text-slate-400">جاري جلب التقارير...</p>
+            </div>
+            <button onclick="closeReportModal()" class="w-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 py-2.5 rounded-2xl text-xs font-bold transition cursor-pointer">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة محتوى (مع خيار وضع السعر) -->
     <div id="contentModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center hidden p-4 z-50">
         <div class="glass-box p-6 rounded-[2rem] w-full max-w-md space-y-3 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
             <h3 class="text-base font-extrabold text-blue-600 dark:text-blue-400 text-center">إضافة حصة جديدة 🎥</h3>
             <div class="space-y-1">
                 <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">عنوان الدرس</label>
                 <input type="text" id="vidTitle" class="w-full px-3.5 py-2.5 border rounded-2xl text-xs bg-white/50 dark:bg-slate-900/50 dark:border-slate-700 font-semibold" placeholder="مثال: شرح درس الخلايا">
+            </div>
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">سعر المحاضرة (ضع 0 إذا كانت مجانية)</label>
+                <input type="number" id="vidPrice" class="w-full px-3.5 py-2.5 border rounded-2xl text-xs bg-white/50 dark:bg-slate-900/50 dark:border-slate-700 font-semibold" placeholder="السعر بالجنية (مثال: 50)" value="0">
             </div>
             <div class="space-y-1">
                 <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">رابط يوتيوب</label>
@@ -244,7 +281,7 @@
                 if(session.role === 'admin') {
                     activateAdminView();
                 } else {
-                    activateStudentView(session.name, session.phone, session.stage, session.grade);
+                    activateStudentView(session.name, session.phone, session.stage, session.grade, session.balance || 0);
                 }
             }
         }
@@ -278,7 +315,11 @@
 
         function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
         function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-        
+        function openChargeModal() { document.getElementById('chargeModal').classList.remove('hidden'); }
+        function closeChargeModal() { document.getElementById('chargeModal').classList.add('hidden'); }
+        function openReportModal() { document.getElementById('reportModal').classList.remove('hidden'); fetchReport(); }
+        function closeReportModal() { document.getElementById('reportModal').classList.add('hidden'); }
+
         function verifyAdmin() {
             const user = document.getElementById('adminUser').value;
             const pass = document.getElementById('adminPass').value;
@@ -295,14 +336,19 @@
             document.getElementById('welcomeUser').innerText = "أهلاً بك يا مستر بيشوي (الأدمن) 👨‍🏫";
             document.getElementById('userStageGrade').innerText = "لوحة التحكم الرئيسية - عرض كافة المراحل";
             document.getElementById('addContentBtn').classList.remove('hidden');
+            document.getElementById('reportBtn').classList.remove('hidden');
+            document.getElementById('walletCard').classList.add('hidden');
             switchView('home');
-            fetchVideosFromSheet('admin', '', '', '');
+            fetchVideosFromSheet('admin', '', '', '', '');
         }
 
-        function activateStudentView(name, phone, stage, grade) {
+        function activateStudentView(name, phone, stage, grade, balance) {
             document.getElementById('welcomeUser').innerText = `أهلاً بك يا بطل: ${name}`;
-            document.getElementById('userStageGrade').innerText = `المرحلة: ${stage} - ${grade} | رَقْمُك: ${phone}`;
+            document.getElementById('userStageGrade').innerText = `المرحلة: ${stage} - ${grade}`;
+            document.getElementById('walletBalance').innerText = `${Number(balance).toFixed(2)} ج.م`;
             document.getElementById('addContentBtn').classList.add('hidden');
+            document.getElementById('reportBtn').classList.add('hidden');
+            document.getElementById('walletCard').classList.remove('hidden');
             switchView('home');
             fetchVideosFromSheet('student', stage, grade, name, phone);
         }
@@ -335,9 +381,9 @@
                 let result = await response.json();
                 
                 if(result.status === 'success') {
-                    localStorage.setItem('user_session', JSON.stringify({role: 'student', name, phone: studentPhone, stage, grade}));
+                    localStorage.setItem('user_session', JSON.stringify({role: 'student', name, phone: studentPhone, stage, grade, balance: 0}));
                     alert("تم إنشاء الحساب بنجاح وتخزينه في جوجل شيت!");
-                    activateStudentView(name, studentPhone, stage, grade);
+                    activateStudentView(name, studentPhone, stage, grade, 0);
                 } else {
                     alert(result.message || "خطأ: الاسم مسجل مسبقاً.");
                 }
@@ -379,9 +425,10 @@
                         name: result.name, 
                         phone: result.phone || "محتفظ به", 
                         stage: result.stage, 
-                        grade: result.grade
+                        grade: result.grade,
+                        balance: result.balance || 0
                     }));
-                    activateStudentView(result.name, result.phone || "طالب", result.stage, result.grade);
+                    activateStudentView(result.name, result.phone || "طالب", result.stage, result.grade, result.balance || 0);
                 } else {
                     alert(result.message || "اسم الطالب أو كلمة المرور غير صحيحة!");
                 }
@@ -403,6 +450,7 @@
 
         async function saveContent() {
             const title = document.getElementById('vidTitle').value;
+            const price = document.getElementById('vidPrice').value || 0;
             const youtubeUrl = document.getElementById('vidYouTube').value;
             const fileInput = document.getElementById('vidFile');
             const stage = document.getElementById('vidStage').value;
@@ -439,6 +487,7 @@
                     body: JSON.stringify({
                         action: 'addVideo',
                         title, 
+                        price,
                         videoSource, 
                         desc, 
                         stage, 
@@ -460,6 +509,7 @@
                 btn.innerText = "نشر الحصة";
                 btn.disabled = false;
                 document.getElementById('vidTitle').value = '';
+                document.getElementById('vidPrice').value = '0';
                 document.getElementById('vidYouTube').value = '';
                 document.getElementById('vidFile').value = '';
                 document.getElementById('vidDesc').value = '';
@@ -485,15 +535,57 @@
             return url;
         }
 
+        async function buyLesson(videoId, price, videoTitle) {
+            let session = JSON.parse(localStorage.getItem('user_session'));
+            if(!session || !session.name) return;
+
+            if(!confirm(`هل تريد تأكيد شراء درس (${videoTitle}) بمبلغ ${price} ج.م من محفظتك؟`)) return;
+
+            try {
+                let response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'buyVideo',
+                        name: session.name,
+                        videoId: videoId,
+                        price: price,
+                        videoTitle: videoTitle
+                    })
+                });
+                let result = await response.json();
+
+                if(result.status === 'success') {
+                    alert("تم الشراء بنجاح! يمكنك الآن مشاهدة المحاضرة.");
+                    session.balance = result.newBalance;
+                    localStorage.setItem('user_session', JSON.stringify(session));
+                    activateStudentView(session.name, session.phone, session.stage, session.grade, result.newBalance);
+                } else {
+                    alert(result.message || "حدث خطأ أثناء عملية الشراء.");
+                }
+            } catch (err) {
+                alert("تعذر إتمام عملية الشراء، حاول لاحقاً.");
+            }
+        }
+
         async function fetchVideosFromSheet(role, stage, grade, studentName, studentPhone) {
             const listContainer = document.getElementById('videosList');
             listContainer.innerHTML = `<p class="text-slate-400 text-center text-xs py-6">جاري جلب الحصص من جوجل شيت... 🔄</p>`;
 
             try {
-                let response = await fetch(`${SCRIPT_URL}?action=getVideos`);
-                let videos = await response.json();
+                let url = `${SCRIPT_URL}?action=getVideos`;
+                if(role === 'student') {
+                    url += `&studentName=${encodeURIComponent(studentName)}`;
+                }
+
+                let response = await fetch(url);
+                let data = await response.json();
                 
-                let allVideos = Array.isArray(videos) ? videos : [];
+                let allVideos = Array.isArray(data.videos) ? data.videos : [];
+                let purchasedIds = data.purchasedIds || [];
+
+                if(role === 'student' && data.balance !== undefined) {
+                    document.getElementById('walletBalance').innerText = `${Number(data.balance).toFixed(2)} ج.م`;
+                }
 
                 if(role === 'student') {
                     allVideos = allVideos.filter(v => v.stage === stage && v.grade === grade);
@@ -506,17 +598,28 @@
 
                 listContainer.innerHTML = "";
                 allVideos.forEach(v => {
+                    let isUnlocked = (role === 'admin') || (v.price === 0) || purchasedIds.includes(String(v.id));
                     let mediaContent = "";
-                    if(v.source) {
+
+                    if(isUnlocked) {
                         if(v.source.startsWith("data:video") || v.source.startsWith("blob:")) {
                             mediaContent = `<video controls controlsList="nodownload" oncontextmenu="return false;" class="w-full h-full rounded-xl shadow bg-black"><source src="${v.source}" type="video/mp4">متصفحك لا يدعم تشغيل الفيديو</video>`;
                         } else {
                             mediaContent = `<iframe src="${v.source}" class="w-full h-full rounded-xl shadow border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                         }
+                    } else {
+                        mediaContent = `
+                            <div class="w-full h-full bg-slate-900 rounded-xl flex flex-col items-center justify-center p-4 text-center space-y-2 text-white">
+                                <span class="text-3xl">🔒</span>
+                                <p class="text-xs font-bold text-slate-300">هذه المحاضرة مدفوعة مغلقة</p>
+                                <button onclick="buyLesson('${v.id}', ${v.price}, '${v.title}')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-4 py-2 rounded-xl text-xs shadow-lg transition cursor-pointer">
+                                    فتح الدرس بـ ${v.price} ج.م
+                                </button>
+                            </div>
+                        `;
                     }
 
-                    // العلامة المائية المتحركة تتضمن (اسم الطالب + رقم الطالب) لتوثيق الحساب ومنع التسريب تماماً
-                    let watermarkHTML = role === 'student' ? `
+                    let watermarkHTML = (role === 'student' && isUnlocked) ? `
                         <div class="watermark-container">
                             <span class="moving-watermark">${studentName} - Tel: ${studentPhone}</span>
                         </div>
@@ -526,15 +629,49 @@
                         <div class="bg-white/70 dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2 text-right">
                             <div class="flex justify-between items-start">
                                 <h4 class="font-bold text-sm text-blue-600 dark:text-blue-400">${v.title}</h4>
-                                <span class="text-[10px] bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-300 px-2.5 py-1 rounded-xl font-extrabold">${v.stage} - ${v.grade}</span>
+                                <div class="flex items-center gap-1">
+                                    ${v.price > 0 ? `<span class="text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-lg font-black">${v.price} ج.م</span>` : `<span class="text-[10px] bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-lg font-black">مجاناً</span>`}
+                                    <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-lg font-extrabold">${v.stage} - ${v.grade}</span>
+                                </div>
                             </div>
                             <p class="text-xs text-slate-500 dark:text-slate-300">${v.desc || ''}</p>
-                            ${mediaContent ? `<div class="aspect-video w-full relative overflow-hidden rounded-xl bg-black">${mediaContent}${watermarkHTML}</div>` : ''}
+                            <div class="aspect-video w-full relative overflow-hidden rounded-xl bg-black">${mediaContent} ${watermarkHTML}</div>
                         </div>
                     `;
                 });
             } catch (err) {
                 listContainer.innerHTML = `<p class="text-slate-400 text-center text-xs py-6">تعذر جلب الحصص من الشيت حالياً.</p>`;
+            }
+        }
+
+        async function fetchReport() {
+            const reportContent = document.getElementById('reportContent');
+            reportContent.innerHTML = `<p class="text-center text-slate-400">جاري تحميل تقارير المبيعات... 🔄</p>`;
+
+            try {
+                let response = await fetch(`${SCRIPT_URL}?action=getPurchaseReport`);
+                let report = await response.json();
+
+                if(!Array.isArray(report) || report.length === 0) {
+                    reportContent.innerHTML = `<p class="text-center text-slate-400 py-4">لا توجد عمليات شراء مسجلة حتى الآن.</p>`;
+                    return;
+                }
+
+                reportContent.innerHTML = "";
+                report.forEach((item, index) => {
+                    reportContent.innerHTML += `
+                        <div class="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-1">
+                            <div class="flex justify-between font-bold text-blue-600 dark:text-blue-400">
+                                <span>👤 ${item.studentName}</span>
+                                <span class="text-emerald-600">${item.price} ج.م</span>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-300 font-semibold">🎥 الدرس: ${item.videoTitle}</p>
+                            <p class="text-[10px] text-slate-400 text-left">📅 ${item.date}</p>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                reportContent.innerHTML = `<p class="text-center text-slate-400 py-4">تعذر جلب التقارير.</p>`;
             }
         }
     </script>
